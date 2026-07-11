@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum Type { daily, weekly, monthly, milestone, levelup }
 
 enum Category { physical, verbal, social, convo, risk, gender, decision }
@@ -214,8 +216,80 @@ class ProgressionRule {
     this.monthEnd = 0,
     this.weekStart = 0,
     this.weekEnd = 0,
-    this.daily = DifficultySet(),
-    this.weekly = DifficultySet(),
-    this.monthly = DifficultySet(),
-  });
+    DifficultySet? daily,
+    DifficultySet? weekly,
+    DifficultySet? monthly,
+  }) : daily = daily ?? DifficultySet(),
+       weekly = weekly ?? DifficultySet(),
+       monthly = monthly ?? DifficultySet();
+}
+
+class AppModel extends ChangeNotifier {
+  final List<ActiveTask> activetasks = [];
+  final List<Model> models = [];
+  final List<HistoryModel> history = [];
+  final StatModel statModel = StatModel(
+    xp: 0,
+    streak: 0,
+    totalCompleted: 0,
+    totalAssigned: 0,
+    completedDifficultyScoreTotal: 0,
+    totalAssignedEasy: 0,
+    totalAssignedMid: 0,
+    totalAssignedHard: 0,
+    totalAssignedExtreme: 0,
+    totalAssignedImpossible: 0,
+    totalAssignedPhysical: 0,
+    totalAssignedVerbal: 0,
+    totalAssignedSocial: 0,
+    totalAssignedConvo: 0,
+    totalAssignedRisk: 0,
+    totalAssignedGender: 0,
+    totalAssignedDecision: 0,
+    totalCompletedPhysical: 0,
+    totalCompletedVerbal: 0,
+    totalCompletedSocial: 0,
+    totalCompletedConvo: 0,
+    totalCompletedRisk: 0,
+    totalCompletedGender: 0,
+    totalCompletedDecision: 0,
+    completedDifficultyScorePhysical: 0,
+    completedDifficultyScoreVerbal: 0,
+    completedDifficultyScoreSocial: 0,
+    completedDifficultyScoreConvo: 0,
+    completedDifficultyScoreRisk: 0,
+    completedDifficultyScoreGender: 0,
+    completedDifficultyScoreDecision: 0,
+    xpPhysical: 0,
+    xpVerbal: 0,
+    xpSocial: 0,
+    xpConvo: 0,
+    xpRisk: 0,
+    xpGender: 0,
+    xpDecision: 0,
+  );
+  final DateValues dateValues = DateValues(
+    lastUpdate: DateTime.now(),
+    weeklyUpdate: DateTime.now(),
+    monthlyUpdate: DateTime.now(),
+    isStreak: false,
+  );
+  final List<LevelUp> levelUp = [];
+}
+
+final appModel = AppModel();
+
+class ModelProvider extends InheritedNotifier<AppModel> {
+  const ModelProvider({
+    super.key,
+    required AppModel appModel,
+    required super.child,
+  }) : super(notifier: appModel);
+
+  static AppModel of(BuildContext context) {
+    final provider = context
+        .dependOnInheritedWidgetOfExactType<ModelProvider>();
+    assert(provider != null, 'No ModelProvider found in context.');
+    return provider!.notifier!;
+  }
 }
