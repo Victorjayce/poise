@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:poise/logics/statlogic.dart';
+import 'package:poise/logics/umodel.dart';
 
 enum Type { daily, weekly, monthly, milestone, levelup }
 
@@ -130,20 +132,20 @@ class StatModel {
   int totalCompletedRisk;
   int totalCompletedGender;
   int totalCompletedDecision;
-  int completedDifficultyScorePhysical;
-  int completedDifficultyScoreVerbal;
-  int completedDifficultyScoreSocial;
-  int completedDifficultyScoreConvo;
-  int completedDifficultyScoreRisk;
-  int completedDifficultyScoreGender;
-  int completedDifficultyScoreDecision;
-  int xpPhysical;
-  int xpVerbal;
-  int xpSocial;
-  int xpConvo;
-  int xpRisk;
-  int xpGender;
-  int xpDecision;
+  double completedDifficultyScorePhysical;
+  double completedDifficultyScoreVerbal;
+  double completedDifficultyScoreSocial;
+  double completedDifficultyScoreConvo;
+  double completedDifficultyScoreRisk;
+  double completedDifficultyScoreGender;
+  double completedDifficultyScoreDecision;
+  double xpPhysical;
+  double xpVerbal;
+  double xpSocial;
+  double xpConvo;
+  double xpRisk;
+  double xpGender;
+  double xpDecision;
 
   StatModel({
     required this.xp,
@@ -225,9 +227,223 @@ class ProgressionRule {
 }
 
 class AppModel extends ChangeNotifier {
-  final List<ActiveTask> activetasks = [];
-  final List<Model> models = [];
-  final List<HistoryModel> history = [];
+  bool isLoading = true;
+  bool newTaskAssigned = false;
+  final List<Model> models = [
+    Model(
+      name: 'Smile at a Stranger',
+      description: 'Smile genuinely at someone you pass.',
+      difficulty: Difficulty.easy,
+      impact: 10,
+      type: Type.daily,
+      timesCompleted: 5,
+      timesAssigned: 8,
+      isEnabled: true,
+    ),
+    Model(
+      name: 'Ask for Directions',
+      description: 'Ask someone for directions even if you know them.',
+      difficulty: Difficulty.mid,
+      impact: 20,
+      type: Type.weekly,
+      timesCompleted: 3,
+      timesAssigned: 5,
+      isEnabled: true,
+    ),
+    Model(
+      name: 'Start a Conversation',
+      description: 'Initiate a 5-minute conversation with someone.',
+      difficulty: Difficulty.hard,
+      impact: 35,
+      type: Type.monthly,
+      timesCompleted: 1,
+      timesAssigned: 2,
+      isEnabled: true,
+    ),
+    Model(
+      name: 'Give a Compliment',
+      description: 'Give a sincere compliment to someone.',
+      difficulty: Difficulty.easy,
+      impact: 15,
+      type: Type.daily,
+      timesCompleted: 7,
+      timesAssigned: 9,
+      isEnabled: true,
+    ),
+    Model(
+      name: 'Speak in Public',
+      description: 'Speak before a small group for at least 2 minutes.',
+      difficulty: Difficulty.extreme,
+      impact: 60,
+      type: Type.milestone,
+      timesCompleted: 0,
+      timesAssigned: 1,
+      isEnabled: true,
+    ),
+  ];
+
+  final List<HistoryModel> history = [
+    HistoryModel(
+      taskName: 'Smile at a Stranger',
+      unitsAssigned: 3,
+      xpGained: 25,
+      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Asked for Directions',
+      unitsAssigned: 1,
+      xpGained: 52,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    HistoryModel(
+      taskName: 'Introduced Myself',
+      unitsAssigned: 2,
+      xpGained: 78,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Made Eye Contact',
+      unitsAssigned: 5,
+      xpGained: 15,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
+    ),
+    HistoryModel(
+      taskName: 'Talked to Cashier',
+      unitsAssigned: 2,
+      xpGained: 30,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
+    ),
+  ];
+
+  final List<ActiveTask> activeTasks = [
+    // Daily
+    ActiveTask(
+      taskId: 1,
+      activeTask: 'Smile at 3 strangers',
+      taskType: Type.daily,
+      unitsAssigned: 3,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.social,
+      taskDifficulty: Difficulty.easy,
+      description: 'Smile naturally at three different people today.',
+    ),
+    ActiveTask(
+      taskId: 2,
+      activeTask: 'Maintain eye contact',
+      taskType: Type.daily,
+      unitsAssigned: 5,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.convo,
+      taskDifficulty: Difficulty.easy,
+      description: 'Hold eye contact for about 3 seconds during conversations.',
+    ),
+    ActiveTask(
+      taskId: 3,
+      activeTask: 'Greet classmates',
+      taskType: Type.daily,
+      unitsAssigned: 4,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.verbal,
+      taskDifficulty: Difficulty.mid,
+      description: 'Say hello first to four classmates.',
+    ),
+
+    // Weekly
+    ActiveTask(
+      taskId: 4,
+      activeTask: 'Ask for directions',
+      taskType: Type.weekly,
+      unitsAssigned: 2,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.risk,
+      taskDifficulty: Difficulty.mid,
+      description: 'Ask two strangers for directions.',
+    ),
+    ActiveTask(
+      taskId: 5,
+      activeTask: 'Compliment someone',
+      taskType: Type.weekly,
+      unitsAssigned: 3,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.social,
+      taskDifficulty: Difficulty.mid,
+      description: 'Give three genuine compliments.',
+    ),
+    ActiveTask(
+      taskId: 6,
+      activeTask: 'Start conversations',
+      taskType: Type.weekly,
+      unitsAssigned: 2,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.convo,
+      taskDifficulty: Difficulty.hard,
+      description: 'Start two conversations lasting over five minutes.',
+    ),
+
+    // Monthly
+    ActiveTask(
+      taskId: 7,
+      activeTask: 'Attend a meetup',
+      taskType: Type.monthly,
+      unitsAssigned: 1,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.social,
+      taskDifficulty: Difficulty.hard,
+      description: 'Attend a social event and interact with people.',
+    ),
+    ActiveTask(
+      taskId: 8,
+      activeTask: 'Lead a discussion',
+      taskType: Type.monthly,
+      unitsAssigned: 1,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.verbal,
+      taskDifficulty: Difficulty.extreme,
+      description: 'Lead a discussion among friends or classmates.',
+    ),
+    ActiveTask(
+      taskId: 9,
+      activeTask: 'Network with seniors',
+      taskType: Type.monthly,
+      unitsAssigned: 2,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.decision,
+      taskDifficulty: Difficulty.hard,
+      description: 'Meet and talk with two senior students.',
+    ),
+
+    // Milestones
+    ActiveTask(
+      taskId: 10,
+      activeTask: 'Give a presentation',
+      taskType: Type.milestone,
+      unitsAssigned: 1,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.verbal,
+      taskDifficulty: Difficulty.extreme,
+      description: 'Deliver a presentation before an audience.',
+    ),
+    ActiveTask(
+      taskId: 11,
+      activeTask: 'Organize a group',
+      taskType: Type.milestone,
+      unitsAssigned: 1,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.decision,
+      taskDifficulty: Difficulty.hard,
+      description: 'Coordinate a small team activity.',
+    ),
+    ActiveTask(
+      taskId: 12,
+      activeTask: 'Approach a stranger',
+      taskType: Type.milestone,
+      unitsAssigned: 5,
+      dateAssigned: DateTime.now(),
+      taskCategory: Category.risk,
+      taskDifficulty: Difficulty.impossible,
+      description: 'Approach five strangers and initiate conversations.',
+    ),
+  ];
   final StatModel statModel = StatModel(
     xp: 0,
     streak: 0,
@@ -274,7 +490,67 @@ class AppModel extends ChangeNotifier {
     monthlyUpdate: DateTime.now(),
     isStreak: false,
   );
-  final List<LevelUp> levelUp = [];
+  final List<LevelUp> levelUp = [
+    LevelUp(
+      level: 2,
+      isActive: true,
+      difficulty: Difficulty.easy,
+      name: 'Morning Confidence',
+      category: Category.physical,
+      description: 'Stand tall and maintain confident posture all day.',
+    ),
+    LevelUp(
+      level: 5,
+      isActive: true,
+      difficulty: Difficulty.mid,
+      name: 'Conversation Master',
+      category: Category.convo,
+      description: 'Keep a conversation going for 10 minutes.',
+    ),
+    LevelUp(
+      level: 10,
+      isActive: true,
+      difficulty: Difficulty.hard,
+      name: 'Fear Breaker',
+      category: Category.risk,
+      description: 'Approach ten strangers this week.',
+    ),
+  ];
+
+  void load() {
+    isLoading = false;
+    newTaskAssigned = true;
+  }
+
+  ({int level, int currentXp, int nextLevelXp}) get levelData =>
+      SModelValues.getLevel(statModel.xp.toInt());
+
+  String get levelText => "Lv.${levelData.level}";
+
+  double get xpProgress => levelData.currentXp / levelData.nextLevelXp;
+
+  String get xpText => "${levelData.currentXp}/${levelData.nextLevelXp} XP";
+
+  // Statistics
+  double get averageDifficulty => UModelValues.avgDiff(statModel);
+
+  double get successRate => UModelValues.sRate(statModel);
+
+  double get confidenceScore => UModelValues.confidenceScore(statModel);
+
+  double get physical => UModelValues.pConfidence(statModel);
+
+  double get verbal => UModelValues.vConfidence(statModel);
+
+  double get social => UModelValues.sConfidence(statModel);
+
+  double get convo => UModelValues.cConfidence(statModel);
+
+  double get risk => UModelValues.rConfidence(statModel);
+
+  double get gender => UModelValues.gConfidence(statModel);
+
+  double get decision => UModelValues.dConfidence(statModel);
 }
 
 final appModel = AppModel();
