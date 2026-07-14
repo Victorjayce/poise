@@ -2,13 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:poise/logics/statlogic.dart';
 import 'package:poise/logics/umodel.dart';
 
-enum Type { daily, weekly, monthly, milestone, levelup }
+enum Type {
+  daily('Daily'),
+  weekly('Weekly'),
+  monthly('Monthly'),
+  milestone('Monthly'),
+  levelup('LevelUp');
 
-enum Category { physical, verbal, social, convo, risk, gender, decision }
+  const Type(this.title);
+  final String title;
+}
+
+enum Category {
+  physical('Physical'),
+  verbal('Verbal'),
+  social('Social'),
+  convo('Convo'),
+  risk('Risk'),
+  gender('Gender'),
+  decision('Decision');
+
+  const Category(this.title);
+  final String title;
+}
 
 enum Cooldown { active, used, half }
 
-enum Difficulty { easy, mid, hard, extreme, impossible }
+enum Difficulty {
+  easy(Colors.yellow, 'Easy'),
+  mid(Colors.green, 'Mid'),
+  hard(Colors.blue, 'Hard'),
+  extreme(Colors.purple, 'Extreme'),
+  impossible(Colors.red, 'Impossible');
+
+  const Difficulty(this.color, this.title);
+  final Color color;
+  final String title;
+}
 
 class ActiveTask {
   int? id;
@@ -68,7 +98,7 @@ class HistoryModel {
 
 class LevelUp {
   final int level;
-  final bool isActive;
+  bool isActive;
   final Difficulty difficulty;
   final String name;
   final Category category;
@@ -89,21 +119,22 @@ class Model {
   final String name;
   final String description;
   final Difficulty difficulty;
-  final int impact;
   final Type type;
   int timesCompleted;
   int timesAssigned;
   bool isEnabled;
+  final Category category;
 
   Model({
+    required this.id,
     required this.name,
     required this.description,
     required this.difficulty,
-    required this.impact,
     required this.type,
     required this.timesCompleted,
     required this.timesAssigned,
     required this.isEnabled,
+    required this.category,
   });
 }
 
@@ -231,58 +262,153 @@ class AppModel extends ChangeNotifier {
   bool newTaskAssigned = false;
   final List<Model> models = [
     Model(
+      id: 1,
       name: 'Smile at a Stranger',
       description: 'Smile genuinely at someone you pass.',
       difficulty: Difficulty.easy,
-      impact: 10,
       type: Type.daily,
       timesCompleted: 5,
       timesAssigned: 8,
       isEnabled: true,
+      category: Category.social,
     ),
     Model(
+      id: 2,
       name: 'Ask for Directions',
       description: 'Ask someone for directions even if you know them.',
       difficulty: Difficulty.mid,
-      impact: 20,
       type: Type.weekly,
       timesCompleted: 3,
       timesAssigned: 5,
       isEnabled: true,
+      category: Category.convo,
     ),
     Model(
+      id: 3,
       name: 'Start a Conversation',
       description: 'Initiate a 5-minute conversation with someone.',
       difficulty: Difficulty.hard,
-      impact: 35,
       type: Type.monthly,
       timesCompleted: 1,
       timesAssigned: 2,
       isEnabled: true,
+      category: Category.convo,
     ),
     Model(
+      id: 4,
       name: 'Give a Compliment',
       description: 'Give a sincere compliment to someone.',
       difficulty: Difficulty.easy,
-      impact: 15,
       type: Type.daily,
       timesCompleted: 7,
       timesAssigned: 9,
       isEnabled: true,
+      category: Category.social,
     ),
     Model(
+      id: 5,
       name: 'Speak in Public',
       description: 'Speak before a small group for at least 2 minutes.',
       difficulty: Difficulty.extreme,
-      impact: 60,
       type: Type.milestone,
       timesCompleted: 0,
       timesAssigned: 1,
       isEnabled: true,
+      category: Category.social,
     ),
   ];
 
   final List<HistoryModel> history = [
+    HistoryModel(
+      taskName: 'Smile at a Stranger',
+      unitsAssigned: 3,
+      xpGained: 25,
+      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Asked for Directions',
+      unitsAssigned: 1,
+      xpGained: 52,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    HistoryModel(
+      taskName: 'Introduced Myself',
+      unitsAssigned: 2,
+      xpGained: 78,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Made Eye Contact',
+      unitsAssigned: 5,
+      xpGained: 15,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
+    ),
+    HistoryModel(
+      taskName: 'Talked to Cashier',
+      unitsAssigned: 2,
+      xpGained: 30,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
+    ),
+    HistoryModel(
+      taskName: 'Smile at a Stranger',
+      unitsAssigned: 3,
+      xpGained: 25,
+      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Asked for Directions',
+      unitsAssigned: 1,
+      xpGained: 52,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    HistoryModel(
+      taskName: 'Introduced Myself',
+      unitsAssigned: 2,
+      xpGained: 78,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Made Eye Contact',
+      unitsAssigned: 5,
+      xpGained: 15,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
+    ),
+    HistoryModel(
+      taskName: 'Talked to Cashier',
+      unitsAssigned: 2,
+      xpGained: 30,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
+    ),
+    HistoryModel(
+      taskName: 'Smile at a Stranger',
+      unitsAssigned: 3,
+      xpGained: 25,
+      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Asked for Directions',
+      unitsAssigned: 1,
+      xpGained: 52,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    HistoryModel(
+      taskName: 'Introduced Myself',
+      unitsAssigned: 2,
+      xpGained: 78,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Made Eye Contact',
+      unitsAssigned: 5,
+      xpGained: 15,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
+    ),
+    HistoryModel(
+      taskName: 'Talked to Cashier',
+      unitsAssigned: 2,
+      xpGained: 30,
+      dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
+    ),
     HistoryModel(
       taskName: 'Smile at a Stranger',
       unitsAssigned: 3,
