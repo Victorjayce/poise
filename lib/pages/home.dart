@@ -28,14 +28,18 @@ class _HomePageState extends State<HomePage> {
       key: scaffoldKey,
       endDrawer: SideBar(
         onHistory: () {
+          final pageContext = context;
+          Navigator.pop(context);
           Navigator.push(
-            context,
+            pageContext,
             MaterialPageRoute(builder: (_) => const HistoryPage()),
           );
         },
         onTasks: () {
+          final pageContext = context;
+          Navigator.pop(context);
           Navigator.push(
-            context,
+            pageContext,
             MaterialPageRoute(builder: (_) => const AllTaskPage()),
           );
         },

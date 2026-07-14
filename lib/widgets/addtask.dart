@@ -21,6 +21,33 @@ Future<bool> showAddTaskDialog(BuildContext context) async {
 class _AddTaskState extends State<AddTask> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
+  bool canSave = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    descriptionController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    nameController.addListener(_validateForm);
+    descriptionController.addListener(_validateForm);
+  }
+
+  void _validateForm() {
+    setState(() {
+      canSave =
+          nameController.text.trim().isNotEmpty &&
+          descriptionController.text.trim().isNotEmpty &&
+          difficulty != null &&
+          taskType != null &&
+          category != null;
+    });
+  }
 
   Difficulty? difficulty;
   Type? taskType;
@@ -74,6 +101,7 @@ class _AddTaskState extends State<AddTask> {
                           .toList(),
                       onChanged: (value) {
                         setState(() => difficulty = value!);
+                        _validateForm();
                       },
                     ),
                   ),
@@ -94,6 +122,7 @@ class _AddTaskState extends State<AddTask> {
                           .toList(),
                       onChanged: (value) {
                         setState(() => taskType = value!);
+                        _validateForm();
                       },
                     ),
                   ),
@@ -112,6 +141,7 @@ class _AddTaskState extends State<AddTask> {
                     .toList(),
                 onChanged: (value) {
                   setState(() => category = value!);
+                  _validateForm();
                 },
               ),
 
@@ -143,19 +173,20 @@ class _AddTaskState extends State<AddTask> {
                     ),
                   ),
 
-                  const SizedBox(width: 16),
+                  Spacer(),
 
-                  Expanded(
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF40DCC7),
-                        foregroundColor: const Color(0xFF00001B),
+                  AnimatedScale(
+                    scale: canSave ? 1 : 0,
+                    duration: Duration(milliseconds: 250),
+                    child: Expanded(
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFF40DCC7),
+                          foregroundColor: const Color(0xFF00001B),
+                        ),
+                        onPressed: () => savemodel(context),
+                        child: const Text("Save"),
                       ),
-                      onPressed: () {
-                        // Save later
-                        Navigator.pop(context, true);
-                      },
-                      child: const Text("Save"),
                     ),
                   ),
                 ],
@@ -165,5 +196,22 @@ class _AddTaskState extends State<AddTask> {
         ),
       ),
     );
+  }
+
+  void savemodel(BuildContext context) {
+    final newModel = Model(
+      id: null,
+      name: nameController.text,
+      description: descriptionController.text,
+      difficulty: difficulty!,
+      type: taskType!,
+      timesCompleted: 0,
+      timesAssigned: 0,
+      isEnabled: true,
+      category: category!,
+    );
+    final app = ModelProvider.of(context);
+    app.addModel(newModel);
+    Navigator.pop(context, true);
   }
 }

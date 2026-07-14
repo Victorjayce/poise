@@ -30,7 +30,7 @@ class CustomNavBar extends StatelessWidget {
                 onPressed: () {
                   Scaffold.of(context).openEndDrawer();
                 },
-                icon: const Icon(Icons.menu, color: Colors.white),
+                icon: const Icon(Icons.menu, color: selected, size: 25),
               ),
 
               const Spacer(),
@@ -53,7 +53,7 @@ class CustomNavBar extends StatelessWidget {
 
               IconButton(
                 onPressed: () => callAddTask(context),
-                icon: const Icon(Icons.add, color: Colors.white),
+                icon: const Icon(Icons.add, color: selected, size: 25),
               ),
             ],
           ),
@@ -78,7 +78,7 @@ class CustomNavBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     alignment: Alignment.center,
-                    child: Icon(Icons.home, color: Colors.white, size: 40),
+                    child: Icon(Icons.home, color: Color(0xff00001d), size: 40),
                   ),
                 ),
               ),
@@ -101,7 +101,11 @@ class CustomNavBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     alignment: Alignment.center,
-                    child: Icon(Icons.bar_chart, color: Colors.white, size: 40),
+                    child: Icon(
+                      Icons.bar_chart,
+                      color: Color(0xff00001d),
+                      size: 40,
+                    ),
                   ),
                 ),
               ),

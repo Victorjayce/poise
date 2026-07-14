@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:poise/logics/statlogic.dart';
 import 'package:poise/model/model.dart';
 
 class TaskCard extends StatefulWidget {
@@ -191,5 +192,53 @@ class _TaskCardState extends State<TaskCard> {
         ),
       );
     }
+  }
+
+  void checktasks(BuildContext context, ActiveTask task) {
+    task.isCompleted = true;
+    final app = ModelProvider.of(context);
+    double addedxp = SModelValues.xpAdded(task, app.statModel);
+    final statModel = SModelValues.statCalc(
+      app.statModel,
+      task,
+      app.dateValues,
+    );
+    if (!app.dateValues.isStreak) {
+      final newDate = app.dateValues;
+      newDate.isStreak = true;
+      app.updateDate(newDate);
+    }
+    //int level = SModelValues.checkLevel(app.statModel.xp.toInt());
+    //update db and check if lvl task is updated
+    HistoryModel newHistory = HistoryModel(
+      taskName: task.activeTask,
+      xpGained: addedxp,
+      dateCompleted: DateTime.now(),
+    );
+    app.addHistory(newHistory);
+    app.updateStats(statModel);
+  }
+
+  void checklvltasks(BuildContext context, LevelUp task) {
+    task.isActive = false;
+    final app = ModelProvider.of(context);
+    double addedxp = SModelValues.lvlXpAdded(task, app.statModel);
+    final statModel = SModelValues.statLvlCalc(
+      app.statModel,
+      task,
+      app.dateValues,
+    );
+    if (!app.dateValues.isStreak) {
+      final newDate = app.dateValues;
+      newDate.isStreak = true;
+      app.updateDate(newDate);
+    }
+    HistoryModel newHistory = HistoryModel(
+      taskName: task.name,
+      xpGained: addedxp,
+      dateCompleted: DateTime.now(),
+    );
+    app.addHistory(newHistory);
+    app.updateStats(statModel);
   }
 }

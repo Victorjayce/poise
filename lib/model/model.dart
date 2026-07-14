@@ -84,13 +84,11 @@ class DateValues {
 class HistoryModel {
   int? id;
   final String taskName;
-  final int unitsAssigned;
   final double xpGained;
   final DateTime dateCompleted;
 
   HistoryModel({
     required this.taskName,
-    required this.unitsAssigned,
     required this.xpGained,
     required this.dateCompleted,
   });
@@ -316,128 +314,348 @@ class AppModel extends ChangeNotifier {
       isEnabled: true,
       category: Category.social,
     ),
+    Model(
+      id: 1,
+      name: 'Smile at a Stranger',
+      description: 'Smile genuinely at someone you pass.',
+      difficulty: Difficulty.easy,
+      type: Type.daily,
+      timesCompleted: 5,
+      timesAssigned: 8,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 2,
+      name: 'Ask for Directions',
+      description: 'Ask someone for directions even if you know them.',
+      difficulty: Difficulty.mid,
+      type: Type.weekly,
+      timesCompleted: 3,
+      timesAssigned: 5,
+      isEnabled: true,
+      category: Category.convo,
+    ),
+    Model(
+      id: 3,
+      name: 'Start a Conversation',
+      description: 'Initiate a 5-minute conversation with someone.',
+      difficulty: Difficulty.hard,
+      type: Type.monthly,
+      timesCompleted: 1,
+      timesAssigned: 2,
+      isEnabled: true,
+      category: Category.convo,
+    ),
+    Model(
+      id: 4,
+      name: 'Give a Compliment',
+      description: 'Give a sincere compliment to someone.',
+      difficulty: Difficulty.easy,
+      type: Type.daily,
+      timesCompleted: 7,
+      timesAssigned: 9,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 5,
+      name: 'Speak in Public',
+      description: 'Speak before a small group for at least 2 minutes.',
+      difficulty: Difficulty.extreme,
+      type: Type.milestone,
+      timesCompleted: 0,
+      timesAssigned: 1,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 1,
+      name: 'Smile at a Stranger',
+      description: 'Smile genuinely at someone you pass.',
+      difficulty: Difficulty.easy,
+      type: Type.daily,
+      timesCompleted: 5,
+      timesAssigned: 8,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 2,
+      name: 'Ask for Directions',
+      description: 'Ask someone for directions even if you know them.',
+      difficulty: Difficulty.mid,
+      type: Type.weekly,
+      timesCompleted: 3,
+      timesAssigned: 5,
+      isEnabled: true,
+      category: Category.convo,
+    ),
+    Model(
+      id: 3,
+      name: 'Start a Conversation',
+      description: 'Initiate a 5-minute conversation with someone.',
+      difficulty: Difficulty.hard,
+      type: Type.monthly,
+      timesCompleted: 1,
+      timesAssigned: 2,
+      isEnabled: true,
+      category: Category.convo,
+    ),
+    Model(
+      id: 4,
+      name: 'Give a Compliment',
+      description: 'Give a sincere compliment to someone.',
+      difficulty: Difficulty.easy,
+      type: Type.daily,
+      timesCompleted: 7,
+      timesAssigned: 9,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 5,
+      name: 'Speak in Public',
+      description: 'Speak before a small group for at least 2 minutes.',
+      difficulty: Difficulty.extreme,
+      type: Type.milestone,
+      timesCompleted: 0,
+      timesAssigned: 1,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 1,
+      name: 'Smile at a Stranger',
+      description: 'Smile genuinely at someone you pass.',
+      difficulty: Difficulty.easy,
+      type: Type.daily,
+      timesCompleted: 5,
+      timesAssigned: 8,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 2,
+      name: 'Ask for Directions',
+      description: 'Ask someone for directions even if you know them.',
+      difficulty: Difficulty.mid,
+      type: Type.weekly,
+      timesCompleted: 3,
+      timesAssigned: 5,
+      isEnabled: true,
+      category: Category.convo,
+    ),
+    Model(
+      id: 3,
+      name: 'Start a Conversation',
+      description: 'Initiate a 5-minute conversation with someone.',
+      difficulty: Difficulty.hard,
+      type: Type.monthly,
+      timesCompleted: 1,
+      timesAssigned: 2,
+      isEnabled: true,
+      category: Category.convo,
+    ),
+    Model(
+      id: 4,
+      name: 'Give a Compliment',
+      description: 'Give a sincere compliment to someone.',
+      difficulty: Difficulty.easy,
+      type: Type.daily,
+      timesCompleted: 7,
+      timesAssigned: 9,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 5,
+      name: 'Speak in Public',
+      description: 'Speak before a small group for at least 2 minutes.',
+      difficulty: Difficulty.extreme,
+      type: Type.milestone,
+      timesCompleted: 0,
+      timesAssigned: 1,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 1,
+      name: 'Smile at a Stranger',
+      description: 'Smile genuinely at someone you pass.',
+      difficulty: Difficulty.easy,
+      type: Type.daily,
+      timesCompleted: 5,
+      timesAssigned: 8,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 2,
+      name: 'Ask for Directions',
+      description: 'Ask someone for directions even if you know them.',
+      difficulty: Difficulty.mid,
+      type: Type.weekly,
+      timesCompleted: 3,
+      timesAssigned: 5,
+      isEnabled: true,
+      category: Category.convo,
+    ),
+    Model(
+      id: 3,
+      name: 'Start a Conversation',
+      description: 'Initiate a 5-minute conversation with someone.',
+      difficulty: Difficulty.hard,
+      type: Type.monthly,
+      timesCompleted: 1,
+      timesAssigned: 2,
+      isEnabled: true,
+      category: Category.convo,
+    ),
+    Model(
+      id: 4,
+      name: 'Give a Compliment',
+      description: 'Give a sincere compliment to someone.',
+      difficulty: Difficulty.easy,
+      type: Type.daily,
+      timesCompleted: 7,
+      timesAssigned: 9,
+      isEnabled: true,
+      category: Category.social,
+    ),
+    Model(
+      id: 5,
+      name: 'Speak in Public',
+      description: 'Speak before a small group for at least 2 minutes.',
+      difficulty: Difficulty.extreme,
+      type: Type.milestone,
+      timesCompleted: 0,
+      timesAssigned: 1,
+      isEnabled: true,
+      category: Category.social,
+    ),
   ];
 
   final List<HistoryModel> history = [
     HistoryModel(
       taskName: 'Smile at a Stranger',
-      unitsAssigned: 3,
       xpGained: 25,
       dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
     ),
     HistoryModel(
       taskName: 'Asked for Directions',
-      unitsAssigned: 1,
       xpGained: 52,
       dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
     ),
     HistoryModel(
       taskName: 'Introduced Myself',
-      unitsAssigned: 2,
       xpGained: 78,
       dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
     ),
     HistoryModel(
       taskName: 'Made Eye Contact',
-      unitsAssigned: 5,
       xpGained: 15,
       dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
     ),
     HistoryModel(
       taskName: 'Talked to Cashier',
-      unitsAssigned: 2,
       xpGained: 30,
       dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
     ),
     HistoryModel(
       taskName: 'Smile at a Stranger',
-      unitsAssigned: 3,
+      xpGained: 25,
+      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Smile at a Stranger',
       xpGained: 25,
       dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
     ),
     HistoryModel(
       taskName: 'Asked for Directions',
-      unitsAssigned: 1,
       xpGained: 52,
       dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
     ),
     HistoryModel(
       taskName: 'Introduced Myself',
-      unitsAssigned: 2,
       xpGained: 78,
       dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
     ),
     HistoryModel(
       taskName: 'Made Eye Contact',
-      unitsAssigned: 5,
       xpGained: 15,
       dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
     ),
     HistoryModel(
       taskName: 'Talked to Cashier',
-      unitsAssigned: 2,
       xpGained: 30,
       dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
     ),
     HistoryModel(
       taskName: 'Smile at a Stranger',
-      unitsAssigned: 3,
+      xpGained: 25,
+      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Smile at a Stranger',
       xpGained: 25,
       dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
     ),
     HistoryModel(
       taskName: 'Asked for Directions',
-      unitsAssigned: 1,
       xpGained: 52,
       dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
     ),
     HistoryModel(
       taskName: 'Introduced Myself',
-      unitsAssigned: 2,
       xpGained: 78,
       dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
     ),
     HistoryModel(
       taskName: 'Made Eye Contact',
-      unitsAssigned: 5,
       xpGained: 15,
       dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
     ),
     HistoryModel(
       taskName: 'Talked to Cashier',
-      unitsAssigned: 2,
       xpGained: 30,
       dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
     ),
     HistoryModel(
       taskName: 'Smile at a Stranger',
-      unitsAssigned: 3,
+      xpGained: 25,
+      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    HistoryModel(
+      taskName: 'Smile at a Stranger',
       xpGained: 25,
       dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
     ),
     HistoryModel(
       taskName: 'Asked for Directions',
-      unitsAssigned: 1,
       xpGained: 52,
       dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
     ),
     HistoryModel(
       taskName: 'Introduced Myself',
-      unitsAssigned: 2,
       xpGained: 78,
       dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
     ),
     HistoryModel(
       taskName: 'Made Eye Contact',
-      unitsAssigned: 5,
       xpGained: 15,
       dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
     ),
     HistoryModel(
       taskName: 'Talked to Cashier',
-      unitsAssigned: 2,
       xpGained: 30,
       dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
+    ),
+    HistoryModel(
+      taskName: 'Smile at a Stranger',
+      xpGained: 25,
+      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
     ),
   ];
 
@@ -570,7 +788,7 @@ class AppModel extends ChangeNotifier {
       description: 'Approach five strangers and initiate conversations.',
     ),
   ];
-  final StatModel statModel = StatModel(
+  StatModel statModel = StatModel(
     xp: 0,
     streak: 0,
     totalCompleted: 0,
@@ -610,7 +828,7 @@ class AppModel extends ChangeNotifier {
     xpGender: 0,
     xpDecision: 0,
   );
-  final DateValues dateValues = DateValues(
+  DateValues dateValues = DateValues(
     lastUpdate: DateTime.now(),
     weeklyUpdate: DateTime.now(),
     monthlyUpdate: DateTime.now(),
@@ -646,6 +864,32 @@ class AppModel extends ChangeNotifier {
   void load() {
     isLoading = false;
     newTaskAssigned = true;
+  }
+
+  void addHistory(HistoryModel nhistory) {
+    history.add(nhistory);
+    notifyListeners();
+  }
+
+  void addModel(Model nmodel) {
+    models.add(nmodel);
+    notifyListeners();
+  }
+
+  void updateStats(StatModel stat) {
+    statModel = stat;
+    notifyListeners();
+  }
+
+  void updateDate(DateValues date) {
+    dateValues = date;
+    notifyListeners();
+  }
+
+  void updateModel(int id) {
+    final model = models.firstWhere((a) => a.id == id);
+    model.isEnabled = !model.isEnabled;
+    notifyListeners();
   }
 
   ({int level, int currentXp, int nextLevelXp}) get levelData =>
