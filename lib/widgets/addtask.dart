@@ -200,7 +200,6 @@ class _AddTaskState extends State<AddTask> {
 
   void savemodel(BuildContext context) {
     final newModel = Model(
-      id: null,
       name: nameController.text,
       description: descriptionController.text,
       difficulty: difficulty!,
