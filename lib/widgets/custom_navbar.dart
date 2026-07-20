@@ -23,7 +23,7 @@ class CustomNavBar extends StatelessWidget {
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
       child: Column(
         children: [
-          // top row
+          SizedBox(height: 12),
           Row(
             children: [
               IconButton(
@@ -58,7 +58,7 @@ class CustomNavBar extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 7),
 
           Row(
             children: [

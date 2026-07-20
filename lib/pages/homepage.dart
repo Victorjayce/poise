@@ -90,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen>
                   padding: const EdgeInsets.all(8.0),
                   child: TaskSection(title: 'Milestone', tasks: milestonetasks),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
