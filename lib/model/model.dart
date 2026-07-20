@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:poise/logics/progressionfactory.dart';
 import 'package:poise/logics/statlogic.dart';
 import 'package:poise/logics/umodel.dart';
+import 'package:poise/logics/dbservice.dart';
 
 enum Type {
   daily('Daily'),
@@ -254,287 +255,10 @@ class ProgressionRule {
 class AppModel extends ChangeNotifier {
   bool isLoading = true;
   bool newTaskAssigned = false;
-  final List<Model> models = [
-    Model(
-      name: 'Smile at a Stranger',
-      description: 'Smile genuinely at someone you pass.',
-      difficulty: Difficulty.easy,
-      type: Type.daily,
-      timesCompleted: 5,
-      timesAssigned: 8,
-      isEnabled: true,
-      category: Category.social,
-    ),
-    Model(
-      name: 'Ask for Directions',
-      description: 'Ask someone for directions even if you know them.',
-      difficulty: Difficulty.mid,
-      type: Type.weekly,
-      timesCompleted: 3,
-      timesAssigned: 5,
-      isEnabled: true,
-      category: Category.convo,
-    ),
-    Model(
-      name: 'Start a Conversation',
-      description: 'Initiate a 5-minute conversation with someone.',
-      difficulty: Difficulty.hard,
-      type: Type.monthly,
-      timesCompleted: 1,
-      timesAssigned: 2,
-      isEnabled: true,
-      category: Category.convo,
-    ),
-    Model(
-      name: 'Give a Compliment',
-      description: 'Give a sincere compliment to someone.',
-      difficulty: Difficulty.easy,
-      type: Type.daily,
-      timesCompleted: 7,
-      timesAssigned: 9,
-      isEnabled: true,
-      category: Category.social,
-    ),
-    Model(
-      name: 'Speak in Public',
-      description: 'Speak before a small group for at least 2 minutes.',
-      difficulty: Difficulty.extreme,
-      type: Type.milestone,
-      timesCompleted: 0,
-      timesAssigned: 1,
-      isEnabled: true,
-      category: Category.social,
-    ),
-  ];
+  late List<Model> models;
+  late List<HistoryModel> history;
+  late List<ActiveTask> activeTasks;
 
-  final List<HistoryModel> history = [
-    HistoryModel(
-      taskName: 'Smile at a Stranger',
-      xpGained: 25,
-      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Asked for Directions',
-      xpGained: 52,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    HistoryModel(
-      taskName: 'Introduced Myself',
-      xpGained: 78,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Made Eye Contact',
-      xpGained: 15,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    HistoryModel(
-      taskName: 'Talked to Cashier',
-      xpGained: 30,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
-    ),
-    HistoryModel(
-      taskName: 'Smile at a Stranger',
-      xpGained: 25,
-      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Smile at a Stranger',
-      xpGained: 25,
-      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Asked for Directions',
-      xpGained: 52,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    HistoryModel(
-      taskName: 'Introduced Myself',
-      xpGained: 78,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Made Eye Contact',
-      xpGained: 15,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    HistoryModel(
-      taskName: 'Talked to Cashier',
-      xpGained: 30,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
-    ),
-    HistoryModel(
-      taskName: 'Smile at a Stranger',
-      xpGained: 25,
-      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Smile at a Stranger',
-      xpGained: 25,
-      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Asked for Directions',
-      xpGained: 52,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    HistoryModel(
-      taskName: 'Introduced Myself',
-      xpGained: 78,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Made Eye Contact',
-      xpGained: 15,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    HistoryModel(
-      taskName: 'Talked to Cashier',
-      xpGained: 30,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
-    ),
-    HistoryModel(
-      taskName: 'Smile at a Stranger',
-      xpGained: 25,
-      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Smile at a Stranger',
-      xpGained: 25,
-      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Asked for Directions',
-      xpGained: 52,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    HistoryModel(
-      taskName: 'Introduced Myself',
-      xpGained: 78,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    HistoryModel(
-      taskName: 'Made Eye Contact',
-      xpGained: 15,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    HistoryModel(
-      taskName: 'Talked to Cashier',
-      xpGained: 30,
-      dateCompleted: DateTime.now().subtract(const Duration(days: 4)),
-    ),
-    HistoryModel(
-      taskName: 'Smile at a Stranger',
-      xpGained: 25,
-      dateCompleted: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-  ];
-
-  final List<ActiveTask> activeTasks = [
-    // Daily
-    ActiveTask(
-      taskId: 1,
-      activeTask: 'Smile at 3 strangers',
-      taskType: Type.daily,
-      taskCategory: Category.social,
-      taskDifficulty: Difficulty.easy,
-      description: 'Smile naturally at three different people today.',
-    ),
-    ActiveTask(
-      taskId: 2,
-      activeTask: 'Maintain eye contact',
-      taskType: Type.daily,
-      taskCategory: Category.convo,
-      taskDifficulty: Difficulty.easy,
-      description: 'Hold eye contact for about 3 seconds during conversations.',
-    ),
-    ActiveTask(
-      taskId: 3,
-      activeTask: 'Greet classmates',
-      taskType: Type.daily,
-      taskCategory: Category.verbal,
-      taskDifficulty: Difficulty.mid,
-      description: 'Say hello first to four classmates.',
-    ),
-
-    // Weekly
-    ActiveTask(
-      taskId: 4,
-      activeTask: 'Ask for directions',
-      taskType: Type.weekly,
-      taskCategory: Category.risk,
-      taskDifficulty: Difficulty.mid,
-      description: 'Ask two strangers for directions.',
-    ),
-    ActiveTask(
-      taskId: 5,
-      activeTask: 'Compliment someone',
-      taskType: Type.weekly,
-      taskCategory: Category.social,
-      taskDifficulty: Difficulty.mid,
-      description: 'Give three genuine compliments.',
-    ),
-    ActiveTask(
-      taskId: 6,
-      activeTask: 'Start conversations',
-      taskType: Type.weekly,
-      taskCategory: Category.convo,
-      taskDifficulty: Difficulty.hard,
-      description: 'Start two conversations lasting over five minutes.',
-    ),
-
-    // Monthly
-    ActiveTask(
-      taskId: 7,
-      activeTask: 'Attend a meetup',
-      taskType: Type.monthly,
-      taskCategory: Category.social,
-      taskDifficulty: Difficulty.hard,
-      description: 'Attend a social event and interact with people.',
-    ),
-    ActiveTask(
-      taskId: 8,
-      activeTask: 'Lead a discussion',
-      taskType: Type.monthly,
-      taskCategory: Category.verbal,
-      taskDifficulty: Difficulty.extreme,
-      description: 'Lead a discussion among friends or classmates.',
-    ),
-    ActiveTask(
-      taskId: 9,
-      activeTask: 'Network with seniors',
-      taskType: Type.monthly,
-      taskCategory: Category.decision,
-      taskDifficulty: Difficulty.hard,
-      description: 'Meet and talk with two senior students.',
-    ),
-
-    // Milestones
-    ActiveTask(
-      taskId: 10,
-      activeTask: 'Give a presentation',
-      taskType: Type.milestone,
-      taskCategory: Category.verbal,
-      taskDifficulty: Difficulty.extreme,
-      description: 'Deliver a presentation before an audience.',
-    ),
-    ActiveTask(
-      taskId: 11,
-      activeTask: 'Organize a group',
-      taskType: Type.milestone,
-      taskCategory: Category.decision,
-      taskDifficulty: Difficulty.hard,
-      description: 'Coordinate a small team activity.',
-    ),
-    ActiveTask(
-      taskId: 12,
-      activeTask: 'Approach a stranger',
-      taskType: Type.milestone,
-      taskCategory: Category.risk,
-      taskDifficulty: Difficulty.impossible,
-      description: 'Approach five strangers and initiate conversations.',
-    ),
-  ];
   StatModel statModel = StatModel(
     xp: 0,
     streak: 0,
@@ -609,7 +333,16 @@ class AppModel extends ChangeNotifier {
   ];
   final List<ProgressionRule> progressionTasks =
       ProgressionFactory.createRules();
-  void load() {
+  final db = DbService.instance;
+  Future<void> load() async {
+    models = await db.getModels();
+    history = await db.getHistory();
+    activeTasks = await db.getActiveTasks();
+    final dateMod = await db.getDateValues();
+    dateValues = dateMod.first;
+    final statMod = await db.getStatModels();
+    statModel = statMod.first;
+
     isLoading = false;
     newTaskAssigned = true;
   }

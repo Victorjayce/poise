@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:poise/pages/home.dart';
 import 'package:poise/model/model.dart';
+import 'logics/dbservice.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DbService.instance.database;
+  await appModel.load();
   runApp(const MyApp());
 }
 
