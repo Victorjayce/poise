@@ -3,6 +3,7 @@ import 'package:poise/logics/progressionfactory.dart';
 import 'package:poise/logics/statlogic.dart';
 import 'package:poise/logics/umodel.dart';
 import 'package:poise/logics/dbservice.dart';
+import 'package:poise/logics/homeload.dart';
 
 enum Type {
   daily('Daily'),
@@ -65,9 +66,9 @@ class ActiveTask {
 }
 
 class DateValues {
-  final DateTime lastUpdate;
-  final DateTime weeklyUpdate;
-  final DateTime monthlyUpdate;
+  DateTime lastUpdate;
+  DateTime weeklyUpdate;
+  DateTime monthlyUpdate;
   bool isStreak;
   DateTime? appStartDate;
 
@@ -254,10 +255,11 @@ class ProgressionRule {
 
 class AppModel extends ChangeNotifier {
   bool isLoading = true;
-  bool newTaskAssigned = false;
+  bool newDay = false;
   late List<Model> models;
   late List<HistoryModel> history;
   late List<ActiveTask> activeTasks;
+  late List<Model> qualifiedModels;
 
   StatModel statModel = StatModel(
     xp: 0,
@@ -331,20 +333,29 @@ class AppModel extends ChangeNotifier {
       description: 'Approach ten strangers this week.',
     ),
   ];
-  final List<ProgressionRule> progressionTasks =
+  final List<ProgressionRule> progressionRules =
       ProgressionFactory.createRules();
   final db = DbService.instance;
+
   Future<void> load() async {
     models = await db.getModels();
     history = await db.getHistory();
     activeTasks = await db.getActiveTasks();
+    qualifiedModels = await db.getQualifiedModels();
     final dateMod = await db.getDateValues();
     dateValues = dateMod.first;
     final statMod = await db.getStatModels();
     statModel = statMod.first;
-
+    loading(
+      qualifiedModels,
+      activeTasks,
+      statModel,
+      dateValues,
+      newDay,
+      progressionRules,
+    );
     isLoading = false;
-    newTaskAssigned = true;
+    newDay = true;
   }
 
   void addHistory(HistoryModel nhistory) {

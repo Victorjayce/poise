@@ -61,7 +61,8 @@ class DbService {
         times_completed INTEGER NOT NULL DEFAULT 0,
         times_assigned INTEGER NOT NULL DEFAULT 0,
         is_enabled INTEGER NOT NULL DEFAULT 1,
-        category TEXT NOT NULL
+        category TEXT NOT NULL,
+        cooldown INTEGER NOT NULL DEFAULT 0
       )
     ''');
 
@@ -201,6 +202,29 @@ class DbService {
   Future<List<Model>> getModels() async {
     final db = await database;
     final maps = await db.query('models');
+    return maps.map((m) {
+      final model = Model(
+        name: m['name'] as String,
+        description: m['description'] as String,
+        difficulty: Difficulty.values.byName(m['difficulty'] as String),
+        type: Type.values.byName(m['type'] as String),
+        timesCompleted: m['times_completed'] as int,
+        timesAssigned: m['times_assigned'] as int,
+        isEnabled: (m['is_enabled'] as int) == 1,
+        category: Category.values.byName(m['category'] as String),
+      );
+      model.id = m['id'] as int?;
+      return model;
+    }).toList();
+  }
+
+  Future<List<Model>> getQualifiedModels() async {
+    final db = await database;
+    final maps = await db.query(
+      'models',
+      where: 'cooldown = ?',
+      whereArgs: [0],
+    );
     return maps.map((m) {
       final model = Model(
         name: m['name'] as String,
