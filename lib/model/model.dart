@@ -117,8 +117,6 @@ class Model {
   final String description;
   final Difficulty difficulty;
   final Type type;
-  int timesCompleted;
-  int timesAssigned;
   bool isEnabled;
   final Category category;
 
@@ -127,8 +125,6 @@ class Model {
     required this.description,
     required this.difficulty,
     required this.type,
-    required this.timesCompleted,
-    required this.timesAssigned,
     required this.isEnabled,
     required this.category,
   });

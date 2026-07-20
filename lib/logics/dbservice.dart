@@ -19,7 +19,6 @@ class DbService {
         task_id INTEGER NOT NULL,
         active_task TEXT NOT NULL,
         task_type TEXT NOT NULL,
-        units_assigned INTEGER NOT NULL,
         task_category TEXT NOT NULL,
         task_difficulty TEXT NOT NULL,
         description TEXT NOT NULL
@@ -58,8 +57,6 @@ class DbService {
         description TEXT NOT NULL,
         difficulty TEXT NOT NULL,
         type TEXT NOT NULL,
-        times_completed INTEGER NOT NULL DEFAULT 0,
-        times_assigned INTEGER NOT NULL DEFAULT 0,
         is_enabled INTEGER NOT NULL DEFAULT 1,
         category TEXT NOT NULL,
         cooldown INTEGER NOT NULL DEFAULT 0
@@ -164,6 +161,43 @@ class DbService {
     }).toList();
   }
 
+  void loadingUpdates(
+    List<ActiveTask> oldtasks,
+    List<ActiveTask> newtasks,
+    List<Model> selectedmodels,
+    StatModel statmodel,
+    DateValues date,
+  ) async {
+    final db = await database;
+    await db.transaction((tx) async {
+      for (final task in oldtasks) {
+        await tx.delete(
+          'active_tasks',
+          where: 'id = ?',
+          whereArgs: [task.taskId],
+        );
+      }
+      for (var task in newtasks) {
+        await tx.insert('active_task', {
+          'active_task': task.activeTask,
+          'task_id': task.taskId,
+          'task_type': task.taskType,
+          'task_category': task.taskCategory,
+          'task_difficulty': task.taskDifficulty,
+          'description': task.description,
+          'is_completed': task.isCompleted,
+        });
+      }
+      await tx.update('date_values', {
+        'last_update': date.lastUpdate.toIso8601String(),
+        'weekly_update': date.weeklyUpdate.toIso8601String(),
+        'monthly_update': date.monthlyUpdate.toIso8601String(),
+        'is_streak': date.isStreak, // To Do
+        'app_start_date': date.appStartDate!.toIso8601String(),
+      });
+    });
+  }
+
   Future<List<HistoryModel>> getHistory() async {
     final db = await database;
     final maps = await db.query('history');
@@ -208,8 +242,6 @@ class DbService {
         description: m['description'] as String,
         difficulty: Difficulty.values.byName(m['difficulty'] as String),
         type: Type.values.byName(m['type'] as String),
-        timesCompleted: m['times_completed'] as int,
-        timesAssigned: m['times_assigned'] as int,
         isEnabled: (m['is_enabled'] as int) == 1,
         category: Category.values.byName(m['category'] as String),
       );
@@ -231,8 +263,6 @@ class DbService {
         description: m['description'] as String,
         difficulty: Difficulty.values.byName(m['difficulty'] as String),
         type: Type.values.byName(m['type'] as String),
-        timesCompleted: m['times_completed'] as int,
-        timesAssigned: m['times_assigned'] as int,
         isEnabled: (m['is_enabled'] as int) == 1,
         category: Category.values.byName(m['category'] as String),
       );
