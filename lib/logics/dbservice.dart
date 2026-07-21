@@ -600,7 +600,7 @@ class DbService {
 
   // ---------------- Inserts ----------------
 
-  Future<int> insertActiveTask(ActiveTask task) async {
+  Future<int> insertMileActiveTask(ActiveTask task) async {
     final db = await database;
     return db.insert('active_tasks', {
       'task_id': task.taskId,
@@ -609,7 +609,7 @@ class DbService {
       'task_category': task.taskCategory.name,
       'task_difficulty': task.taskDifficulty.name,
       'description': task.description,
-      'is_completed': task.isCompleted ? 1 : 0,
+      'is_completed': 0,
     });
   }
 

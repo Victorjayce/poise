@@ -436,13 +436,14 @@ class AppModel extends ChangeNotifier {
         taskCategory: nmodel.category,
         taskDifficulty: nmodel.difficulty,
       );
+      db.insertMileActiveTask(newActiveTask);
     } else if (nmodel.type == Type.levelup) {
       return;
     } else {
       models.add(nmodel);
       db.insertModel(nmodel);
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   void updateModel(int id) {
