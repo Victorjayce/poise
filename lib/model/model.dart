@@ -349,6 +349,7 @@ class AppModel extends ChangeNotifier {
       dateValues,
       newDay,
       progressionRules,
+      db,
     );
     isLoading = false;
     newDay = true;

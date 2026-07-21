@@ -6,7 +6,6 @@ import 'logics/dbservice.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DbService.instance.database;
-  await appModel.load();
   runApp(const MyApp());
 }
 

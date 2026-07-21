@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:poise/model/model.dart';
 
 class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+  const AddTask({super.key, required this.pageContext});
+  final BuildContext pageContext;
 
   @override
   State<AddTask> createState() => _AddTaskState();
@@ -12,7 +13,7 @@ Future<bool> showAddTaskDialog(BuildContext context) async {
   final result = await showDialog<bool>(
     context: context,
     barrierDismissible: false,
-    builder: (_) => AddTask(),
+    builder: (_) => AddTask(pageContext: context),
   );
 
   return result ?? false;
@@ -90,12 +91,16 @@ class _AddTaskState extends State<AddTask> {
                   Expanded(
                     child: DropdownButtonFormField<Difficulty>(
                       initialValue: difficulty,
+                      dropdownColor: Color(0xff00001d),
                       decoration: const InputDecoration(labelText: "Diff"),
                       items: Difficulty.values
                           .map(
                             (e) => DropdownMenuItem(
                               value: e,
-                              child: Text(e.title),
+                              child: Text(
+                                e.title,
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           )
                           .toList(),
@@ -111,12 +116,16 @@ class _AddTaskState extends State<AddTask> {
                   Expanded(
                     child: DropdownButtonFormField<Type>(
                       initialValue: taskType,
+                      dropdownColor: Color(0xff00001d),
                       decoration: const InputDecoration(labelText: "Type"),
                       items: Type.values
                           .map(
                             (e) => DropdownMenuItem(
                               value: e,
-                              child: Text(e.title),
+                              child: Text(
+                                e.title,
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           )
                           .toList(),
@@ -133,10 +142,17 @@ class _AddTaskState extends State<AddTask> {
 
               DropdownButtonFormField<Category>(
                 initialValue: category,
+                dropdownColor: Color(0xff00001d),
                 decoration: const InputDecoration(labelText: "Category"),
                 items: Category.values
                     .map(
-                      (e) => DropdownMenuItem(value: e, child: Text(e.title)),
+                      (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(
+                          e.title,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     )
                     .toList(),
                 onChanged: (value) {
@@ -173,18 +189,22 @@ class _AddTaskState extends State<AddTask> {
                     ),
                   ),
 
-                  Spacer(),
-
                   AnimatedScale(
                     scale: canSave ? 1 : 0,
                     duration: Duration(milliseconds: 250),
-                    child: Expanded(
+                    child: SizedBox(width: 15),
+                  ),
+
+                  Expanded(
+                    child: AnimatedScale(
+                      scale: canSave ? 1 : 0,
+                      duration: Duration(milliseconds: 250),
                       child: FilledButton(
                         style: FilledButton.styleFrom(
                           backgroundColor: const Color(0xFF40DCC7),
                           foregroundColor: const Color(0xFF00001B),
                         ),
-                        onPressed: () => savemodel(context),
+                        onPressed: () => savemodel(context, widget.pageContext),
                         child: const Text("Save"),
                       ),
                     ),
@@ -198,7 +218,7 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  void savemodel(BuildContext context) {
+  void savemodel(BuildContext context, BuildContext pageContext) {
     final newModel = Model(
       name: nameController.text,
       description: descriptionController.text,
@@ -210,5 +230,13 @@ class _AddTaskState extends State<AddTask> {
     final app = ModelProvider.of(context);
     app.addModel(newModel);
     Navigator.pop(context, true);
+    ScaffoldMessenger.of(pageContext).showSnackBar(
+      const SnackBar(
+        content: Text('Task added!'),
+        backgroundColor: Color(0xff40dcc7),
+        dismissDirection: DismissDirection.horizontal,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }
