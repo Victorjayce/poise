@@ -204,8 +204,6 @@ class _AddTaskState extends State<AddTask> {
       description: descriptionController.text,
       difficulty: difficulty!,
       type: taskType!,
-      timesCompleted: 0,
-      timesAssigned: 0,
       isEnabled: true,
       category: category!,
     );

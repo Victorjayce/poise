@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:poise/logics/statlogic.dart';
 import 'package:poise/model/model.dart';
 
 class TaskCard extends StatefulWidget {
@@ -46,9 +45,7 @@ class _TaskCardState extends State<TaskCard> {
                   ? null
                   : (value) {
                       if (value == true) {
-                        setState(() {
-                          task.isCompleted = true;
-                        });
+                        check(context, task);
                       }
                     },
             ),
@@ -130,9 +127,7 @@ class _TaskCardState extends State<TaskCard> {
                   ? null
                   : (value) {
                       if (value == true) {
-                        setState(() {
-                          task.isActive = false;
-                        });
+                        checklevel(context, task);
                       }
                     },
             ),
@@ -194,51 +189,79 @@ class _TaskCardState extends State<TaskCard> {
     }
   }
 
-  void checktasks(BuildContext context, ActiveTask task) {
-    task.isCompleted = true;
+  Future<void> check(BuildContext context, ActiveTask task) async {
     final app = ModelProvider.of(context);
-    double addedxp = SModelValues.xpAdded(task, app.statModel);
-    final statModel = SModelValues.statCalc(
-      app.statModel,
-      task,
-      app.dateValues,
-    );
-    if (!app.dateValues.isStreak) {
-      final newDate = app.dateValues;
-      newDate.isStreak = true;
-      app.updateDate(newDate);
+    final (reached, level) = await app.checktask(task);
+    if (!context.mounted) return;
+    if (reached > 0) {
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Color(0xff00001d),
+            title: const Row(
+              children: [
+                Icon(
+                  Icons.workspace_premium_outlined,
+                  color: Color(0xff40dcc7),
+                ),
+                SizedBox(width: 8),
+                Text("Level Up!"),
+              ],
+            ),
+            content: Text(
+              "Congratulation on reaching Level ${level.toString()}\nLevel Up tasks will be assigned tommorow",
+            ),
+            actions: [
+              FilledButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
-    //int level = SModelValues.checkLevel(app.statModel.xp.toInt());
-    //update db and check if lvl task is updated
-    HistoryModel newHistory = HistoryModel(
-      taskName: task.activeTask,
-      xpGained: addedxp,
-      dateCompleted: DateTime.now(),
-    );
-    app.addHistory(newHistory);
-    app.updateStats(statModel);
   }
 
-  void checklvltasks(BuildContext context, LevelUp task) {
-    task.isActive = false;
+  Future<void> checklevel(BuildContext context, LevelUp task) async {
     final app = ModelProvider.of(context);
-    double addedxp = SModelValues.lvlXpAdded(task, app.statModel);
-    final statModel = SModelValues.statLvlCalc(
-      app.statModel,
-      task,
-      app.dateValues,
-    );
-    if (!app.dateValues.isStreak) {
-      final newDate = app.dateValues;
-      newDate.isStreak = true;
-      app.updateDate(newDate);
+    final (reached, level) = await app.checklvltasks(task);
+    if (!context.mounted) return;
+    if (reached > 0) {
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Color(0xff00001d),
+            title: const Row(
+              children: [
+                Icon(
+                  Icons.workspace_premium_outlined,
+                  color: Color(0xff40dcc7),
+                ),
+                SizedBox(width: 8),
+                Text("Level Up!"),
+              ],
+            ),
+            content: Text(
+              "Congratulation on reaching Level ${level.toString()} \nLevel Up tasks will be assigned tommorow",
+            ),
+            actions: [
+              FilledButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
-    HistoryModel newHistory = HistoryModel(
-      taskName: task.name,
-      xpGained: addedxp,
-      dateCompleted: DateTime.now(),
-    );
-    app.addHistory(newHistory);
-    app.updateStats(statModel);
   }
 }

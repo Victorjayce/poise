@@ -165,7 +165,7 @@ class DbService {
     List<ActiveTask> oldtasks,
     List<ActiveTask> newtasks,
     List<Model> selectedmodels,
-    StatModel statmodel,
+    StatModel stat,
     DateValues date,
   ) async {
     final db = await database;
@@ -181,11 +181,11 @@ class DbService {
         await tx.insert('active_task', {
           'active_task': task.activeTask,
           'task_id': task.taskId,
-          'task_type': task.taskType,
-          'task_category': task.taskCategory,
-          'task_difficulty': task.taskDifficulty,
+          'task_type': task.taskType.name,
+          'task_category': task.taskCategory.name,
+          'task_difficulty': task.taskDifficulty.name,
           'description': task.description,
-          'is_completed': task.isCompleted,
+          'is_completed': task.isCompleted ? 1 : 0,
         });
       }
       await tx.update('date_values', {
@@ -195,7 +195,249 @@ class DbService {
         'is_streak': date.isStreak, // To Do
         'app_start_date': date.appStartDate!.toIso8601String(),
       });
+      for (final model in selectedmodels) {
+        tx.update(
+          'model',
+          {'cooldown': 1},
+          where: 'id = ?',
+          whereArgs: [model.id],
+        );
+      }
+      await tx.update(
+        'stat_model',
+        {
+          'xp': stat.xp,
+          'streak': stat.streak,
+          'total_completed': stat.totalCompleted,
+          'total_assigned': stat.totalAssigned,
+          'completed_difficulty_score_total':
+              stat.completedDifficultyScoreTotal,
+          'total_assigned_easy': stat.totalAssignedEasy,
+          'total_assigned_mid': stat.totalAssignedMid,
+          'total_assigned_hard': stat.totalAssignedHard,
+          'total_assigned_extreme': stat.totalAssignedExtreme,
+          'total_assigned_impossible': stat.totalAssignedImpossible,
+          'total_assigned_physical': stat.totalAssignedPhysical,
+          'total_assigned_verbal': stat.totalAssignedVerbal,
+          'total_assigned_social': stat.totalAssignedSocial,
+          'total_assigned_convo': stat.totalAssignedConvo,
+          'total_assigned_risk': stat.totalAssignedRisk,
+          'total_assigned_gender': stat.totalAssignedGender,
+          'total_assigned_decision': stat.totalAssignedDecision,
+          'total_completed_physical': stat.totalCompletedPhysical,
+          'total_completed_verbal': stat.totalCompletedVerbal,
+          'total_completed_social': stat.totalCompletedSocial,
+          'total_completed_convo': stat.totalCompletedConvo,
+          'total_completed_risk': stat.totalCompletedRisk,
+          'total_completed_gender': stat.totalCompletedGender,
+          'total_completed_decision': stat.totalCompletedDecision,
+          'completed_difficulty_score_physical':
+              stat.completedDifficultyScorePhysical,
+          'completed_difficulty_score_verbal':
+              stat.completedDifficultyScoreVerbal,
+          'completed_difficulty_score_social':
+              stat.completedDifficultyScoreSocial,
+          'completed_difficulty_score_convo':
+              stat.completedDifficultyScoreConvo,
+          'completed_difficulty_score_risk': stat.completedDifficultyScoreRisk,
+          'completed_difficulty_score_gender':
+              stat.completedDifficultyScoreGender,
+          'completed_difficulty_score_decision':
+              stat.completedDifficultyScoreDecision,
+          'xp_physical': stat.xpPhysical,
+          'xp_verbal': stat.xpVerbal,
+          'xp_social': stat.xpSocial,
+          'xp_convo': stat.xpConvo,
+          'xp_risk': stat.xpRisk,
+          'xp_gender': stat.xpGender,
+          'xp_decision': stat.xpDecision,
+        },
+        where: 'id = ?',
+        whereArgs: [1],
+      );
     });
+  }
+
+  Future<int> checkUpdates(
+    ActiveTask task,
+    StatModel stat,
+    DateValues date,
+    HistoryModel history,
+    int level,
+  ) async {
+    final db = await database;
+    int rows = 0;
+    db.transaction((tx) async {
+      await tx.update(
+        'stat_model',
+        {
+          'xp': stat.xp,
+          'streak': stat.streak,
+          'total_completed': stat.totalCompleted,
+          'total_assigned': stat.totalAssigned,
+          'completed_difficulty_score_total':
+              stat.completedDifficultyScoreTotal,
+          'total_assigned_easy': stat.totalAssignedEasy,
+          'total_assigned_mid': stat.totalAssignedMid,
+          'total_assigned_hard': stat.totalAssignedHard,
+          'total_assigned_extreme': stat.totalAssignedExtreme,
+          'total_assigned_impossible': stat.totalAssignedImpossible,
+          'total_assigned_physical': stat.totalAssignedPhysical,
+          'total_assigned_verbal': stat.totalAssignedVerbal,
+          'total_assigned_social': stat.totalAssignedSocial,
+          'total_assigned_convo': stat.totalAssignedConvo,
+          'total_assigned_risk': stat.totalAssignedRisk,
+          'total_assigned_gender': stat.totalAssignedGender,
+          'total_assigned_decision': stat.totalAssignedDecision,
+          'total_completed_physical': stat.totalCompletedPhysical,
+          'total_completed_verbal': stat.totalCompletedVerbal,
+          'total_completed_social': stat.totalCompletedSocial,
+          'total_completed_convo': stat.totalCompletedConvo,
+          'total_completed_risk': stat.totalCompletedRisk,
+          'total_completed_gender': stat.totalCompletedGender,
+          'total_completed_decision': stat.totalCompletedDecision,
+          'completed_difficulty_score_physical':
+              stat.completedDifficultyScorePhysical,
+          'completed_difficulty_score_verbal':
+              stat.completedDifficultyScoreVerbal,
+          'completed_difficulty_score_social':
+              stat.completedDifficultyScoreSocial,
+          'completed_difficulty_score_convo':
+              stat.completedDifficultyScoreConvo,
+          'completed_difficulty_score_risk': stat.completedDifficultyScoreRisk,
+          'completed_difficulty_score_gender':
+              stat.completedDifficultyScoreGender,
+          'completed_difficulty_score_decision':
+              stat.completedDifficultyScoreDecision,
+          'xp_physical': stat.xpPhysical,
+          'xp_verbal': stat.xpVerbal,
+          'xp_social': stat.xpSocial,
+          'xp_convo': stat.xpConvo,
+          'xp_risk': stat.xpRisk,
+          'xp_gender': stat.xpGender,
+          'xp_decision': stat.xpDecision,
+        },
+        where: 'id = ?',
+        whereArgs: [1],
+      );
+      await tx.update(
+        'active_task',
+        {'is_completed': 1},
+        where: 'id = ?',
+        whereArgs: [task.id],
+      );
+      if (date.isStreak) {
+        await tx.update(
+          'date_values',
+          {'is_streak': 1},
+          where: 'id = ?',
+          whereArgs: [1],
+        );
+      }
+      await tx.insert('history', {
+        'task_name': history.taskName,
+        'xp_gained': history.xpGained,
+        'date_completed': history.dateCompleted.toIso8601String(),
+      });
+      rows = await tx.update(
+        'level_up',
+        {'is_active': 1},
+        where: 'level = ?',
+        whereArgs: [level],
+      );
+    });
+    return rows;
+  }
+
+  Future<int> checkLvlUpdates(
+    LevelUp task,
+    StatModel stat,
+    DateValues date,
+    HistoryModel history,
+    int level,
+  ) async {
+    final db = await database;
+    int rows = 0;
+    db.transaction((tx) async {
+      await tx.update(
+        'stat_model',
+        {
+          'xp': stat.xp,
+          'streak': stat.streak,
+          'total_completed': stat.totalCompleted,
+          'total_assigned': stat.totalAssigned,
+          'completed_difficulty_score_total':
+              stat.completedDifficultyScoreTotal,
+          'total_assigned_easy': stat.totalAssignedEasy,
+          'total_assigned_mid': stat.totalAssignedMid,
+          'total_assigned_hard': stat.totalAssignedHard,
+          'total_assigned_extreme': stat.totalAssignedExtreme,
+          'total_assigned_impossible': stat.totalAssignedImpossible,
+          'total_assigned_physical': stat.totalAssignedPhysical,
+          'total_assigned_verbal': stat.totalAssignedVerbal,
+          'total_assigned_social': stat.totalAssignedSocial,
+          'total_assigned_convo': stat.totalAssignedConvo,
+          'total_assigned_risk': stat.totalAssignedRisk,
+          'total_assigned_gender': stat.totalAssignedGender,
+          'total_assigned_decision': stat.totalAssignedDecision,
+          'total_completed_physical': stat.totalCompletedPhysical,
+          'total_completed_verbal': stat.totalCompletedVerbal,
+          'total_completed_social': stat.totalCompletedSocial,
+          'total_completed_convo': stat.totalCompletedConvo,
+          'total_completed_risk': stat.totalCompletedRisk,
+          'total_completed_gender': stat.totalCompletedGender,
+          'total_completed_decision': stat.totalCompletedDecision,
+          'completed_difficulty_score_physical':
+              stat.completedDifficultyScorePhysical,
+          'completed_difficulty_score_verbal':
+              stat.completedDifficultyScoreVerbal,
+          'completed_difficulty_score_social':
+              stat.completedDifficultyScoreSocial,
+          'completed_difficulty_score_convo':
+              stat.completedDifficultyScoreConvo,
+          'completed_difficulty_score_risk': stat.completedDifficultyScoreRisk,
+          'completed_difficulty_score_gender':
+              stat.completedDifficultyScoreGender,
+          'completed_difficulty_score_decision':
+              stat.completedDifficultyScoreDecision,
+          'xp_physical': stat.xpPhysical,
+          'xp_verbal': stat.xpVerbal,
+          'xp_social': stat.xpSocial,
+          'xp_convo': stat.xpConvo,
+          'xp_risk': stat.xpRisk,
+          'xp_gender': stat.xpGender,
+          'xp_decision': stat.xpDecision,
+        },
+        where: 'id = ?',
+        whereArgs: [1],
+      );
+      await tx.update(
+        'level_up',
+        {'is_active': 0},
+        where: 'level = ?',
+        whereArgs: [task.level],
+      );
+      if (date.isStreak) {
+        await tx.update(
+          'date_values',
+          {'is_streak': 1},
+          where: 'id = ?',
+          whereArgs: [1],
+        );
+      }
+      await tx.insert('history', {
+        'task_name': history.taskName,
+        'xp_gained': history.xpGained,
+        'date_completed': history.dateCompleted.toIso8601String(),
+      });
+      rows = await tx.update(
+        'level',
+        {'is_active': 1},
+        where: 'level = ?',
+        whereArgs: [level],
+      );
+    });
+    return rows;
   }
 
   Future<List<HistoryModel>> getHistory() async {
@@ -343,5 +585,112 @@ class DbService {
       }
       return dateValues;
     }).toList();
+  }
+
+  // ---------------- Inserts ----------------
+
+  Future<int> insertActiveTask(ActiveTask task) async {
+    final db = await database;
+    return db.insert('active_tasks', {
+      'task_id': task.taskId,
+      'active_task': task.activeTask,
+      'task_type': task.taskType.name,
+      'task_category': task.taskCategory.name,
+      'task_difficulty': task.taskDifficulty.name,
+      'description': task.description,
+      'is_completed': task.isCompleted ? 1 : 0,
+    });
+  }
+
+  Future<int> insertModel(Model model) async {
+    final db = await database;
+    return db.insert('models', {
+      'name': model.name,
+      'description': model.description,
+      'difficulty': model.difficulty.name,
+      'type': model.type.name,
+      'is_enabled': model.isEnabled ? 1 : 0,
+      'category': model.category.name,
+    });
+  }
+
+  Future<int> updateModel(Model model) async {
+    final db = await database;
+    return db.update(
+      'models',
+      {'is_enabled': 0},
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
+  }
+
+  Future<int> updateStatModel(StatModel stat) async {
+    final db = await database;
+    return db.update(
+      'stat_model',
+      {
+        'xp': stat.xp,
+        'streak': stat.streak,
+        'total_completed': stat.totalCompleted,
+        'total_assigned': stat.totalAssigned,
+        'completed_difficulty_score_total': stat.completedDifficultyScoreTotal,
+        'total_assigned_easy': stat.totalAssignedEasy,
+        'total_assigned_mid': stat.totalAssignedMid,
+        'total_assigned_hard': stat.totalAssignedHard,
+        'total_assigned_extreme': stat.totalAssignedExtreme,
+        'total_assigned_impossible': stat.totalAssignedImpossible,
+        'total_assigned_physical': stat.totalAssignedPhysical,
+        'total_assigned_verbal': stat.totalAssignedVerbal,
+        'total_assigned_social': stat.totalAssignedSocial,
+        'total_assigned_convo': stat.totalAssignedConvo,
+        'total_assigned_risk': stat.totalAssignedRisk,
+        'total_assigned_gender': stat.totalAssignedGender,
+        'total_assigned_decision': stat.totalAssignedDecision,
+        'total_completed_physical': stat.totalCompletedPhysical,
+        'total_completed_verbal': stat.totalCompletedVerbal,
+        'total_completed_social': stat.totalCompletedSocial,
+        'total_completed_convo': stat.totalCompletedConvo,
+        'total_completed_risk': stat.totalCompletedRisk,
+        'total_completed_gender': stat.totalCompletedGender,
+        'total_completed_decision': stat.totalCompletedDecision,
+        'completed_difficulty_score_physical':
+            stat.completedDifficultyScorePhysical,
+        'completed_difficulty_score_verbal':
+            stat.completedDifficultyScoreVerbal,
+        'completed_difficulty_score_social':
+            stat.completedDifficultyScoreSocial,
+        'completed_difficulty_score_convo': stat.completedDifficultyScoreConvo,
+        'completed_difficulty_score_risk': stat.completedDifficultyScoreRisk,
+        'completed_difficulty_score_gender':
+            stat.completedDifficultyScoreGender,
+        'completed_difficulty_score_decision':
+            stat.completedDifficultyScoreDecision,
+        'xp_physical': stat.xpPhysical,
+        'xp_verbal': stat.xpVerbal,
+        'xp_social': stat.xpSocial,
+        'xp_convo': stat.xpConvo,
+        'xp_risk': stat.xpRisk,
+        'xp_gender': stat.xpGender,
+        'xp_decision': stat.xpDecision,
+      },
+      where: 'id = ?',
+      whereArgs: [1],
+    );
+  }
+
+  Future<int> updateDateValues(DateValues dateValues) async {
+    final db = await database;
+    return db.update(
+      'date_values',
+      {
+        'last_update': dateValues.lastUpdate.toIso8601String(),
+        'weekly_update': dateValues.weeklyUpdate.toIso8601String(),
+        'monthly_update': dateValues.monthlyUpdate.toIso8601String(),
+        'is_streak': dateValues.isStreak ? 1 : 0,
+        'app_start_date': dateValues.appStartDate?.toIso8601String(),
+      },
+      where: 'id = ?',
+      whereArgs: [1],
+    );
   }
 }

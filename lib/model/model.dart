@@ -359,11 +359,6 @@ class AppModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addModel(Model nmodel) {
-    models.add(nmodel);
-    notifyListeners();
-  }
-
   void updateStats(StatModel stat) {
     statModel = stat;
     notifyListeners();
@@ -374,9 +369,74 @@ class AppModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<(int, int)> checktask(ActiveTask task) async {
+    task.isCompleted = true;
+    double addedxp = SModelValues.xpAdded(task, statModel);
+    statModel = SModelValues.statCalc(statModel, task, dateValues);
+    if (!dateValues.isStreak) {
+      final newDate = dateValues;
+      newDate.isStreak = true;
+      updateDate(newDate);
+    }
+    int level = SModelValues.checkLevel(statModel.xp.toInt());
+    //update db and check if lvl task is updated
+    HistoryModel newHistory = HistoryModel(
+      taskName: task.activeTask,
+      xpGained: addedxp,
+      dateCompleted: DateTime.now(),
+    );
+    addHistory(newHistory);
+    updateStats(statModel);
+    final rows = await db.checkUpdates(
+      task,
+      statModel,
+      dateValues,
+      newHistory,
+      level,
+    );
+    notifyListeners();
+    return (rows, level);
+  }
+
+  Future<(int, int)> checklvltasks(LevelUp task) async {
+    task.isActive = false;
+    double addedxp = SModelValues.lvlXpAdded(task, statModel);
+    statModel = SModelValues.statLvlCalc(statModel, task, dateValues);
+    if (!dateValues.isStreak) {
+      final newDate = dateValues;
+      newDate.isStreak = true;
+      updateDate(newDate);
+    }
+    HistoryModel newHistory = HistoryModel(
+      taskName: task.name,
+      xpGained: addedxp,
+      dateCompleted: DateTime.now(),
+    );
+    int level = SModelValues.checkLevel(statModel.xp.toInt());
+    addHistory(newHistory);
+    updateStats(statModel);
+
+    final rows = await db.checkLvlUpdates(
+      task,
+      statModel,
+      dateValues,
+      newHistory,
+      level,
+    );
+    notifyListeners();
+    return (rows, level);
+  }
+
+  void addModel(Model nmodel) {
+    models.add(nmodel);
+    db.insertModel(nmodel);
+    notifyListeners();
+  }
+
   void updateModel(int id) {
     final model = models.firstWhere((a) => a.id == id);
     model.isEnabled = !model.isEnabled;
+    db.updateModel(model);
     notifyListeners();
   }
 
