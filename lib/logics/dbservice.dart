@@ -1,3 +1,4 @@
+import 'package:poise/logics/seed.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:poise/model/model.dart';
@@ -21,7 +22,7 @@ class DbService {
         task_type TEXT NOT NULL,
         task_category TEXT NOT NULL,
         task_difficulty TEXT NOT NULL,
-        description TEXT NOT NULL
+        description TEXT NOT NULL,
         is_completed INTEGER NOT NULL
       )
     ''');
@@ -48,6 +49,7 @@ class DbService {
         description TEXT NOT NULL
       )
     ''');
+        await seedLevelUps(db);
 
         // Model
         await db.execute('''
@@ -62,6 +64,7 @@ class DbService {
         cooldown INTEGER NOT NULL DEFAULT 0
       )
     ''');
+        await seedModels(db);
 
         await db.execute('''
   CREATE TABLE stat_model (
@@ -178,7 +181,7 @@ class DbService {
         );
       }
       for (var task in newtasks) {
-        await tx.insert('active_task', {
+        await tx.insert('active_tasks', {
           'active_task': task.activeTask,
           'task_id': task.taskId,
           'task_type': task.taskType.name,
@@ -192,12 +195,20 @@ class DbService {
         'last_update': date.lastUpdate.toIso8601String(),
         'weekly_update': date.weeklyUpdate.toIso8601String(),
         'monthly_update': date.monthlyUpdate.toIso8601String(),
-        'is_streak': date.isStreak, // To Do
+        'is_streak': 0, // To Do
         'app_start_date': date.appStartDate!.toIso8601String(),
       });
+      await tx.rawUpdate('''
+    UPDATE models
+    SET cooldown = CASE
+      WHEN cooldown = 1 THEN 2
+      WHEN cooldown = 2 THEN 0
+    END
+    WHERE cooldown IN (1, 2)
+  ''');
       for (final model in selectedmodels) {
         tx.update(
-          'model',
+          'models',
           {'cooldown': 1},
           where: 'id = ?',
           whereArgs: [model.id],
@@ -267,7 +278,7 @@ class DbService {
   ) async {
     final db = await database;
     int rows = 0;
-    db.transaction((tx) async {
+    await db.transaction((tx) async {
       await tx.update(
         'stat_model',
         {
@@ -321,7 +332,7 @@ class DbService {
         whereArgs: [1],
       );
       await tx.update(
-        'active_task',
+        'active_tasks',
         {'is_completed': 1},
         where: 'id = ?',
         whereArgs: [task.id],
@@ -358,7 +369,7 @@ class DbService {
   ) async {
     final db = await database;
     int rows = 0;
-    db.transaction((tx) async {
+    await db.transaction((tx) async {
       await tx.update(
         'stat_model',
         {
@@ -431,7 +442,7 @@ class DbService {
         'date_completed': history.dateCompleted.toIso8601String(),
       });
       rows = await tx.update(
-        'level',
+        'level_up',
         {'is_active': 1},
         where: 'level = ?',
         whereArgs: [level],
@@ -575,13 +586,13 @@ class DbService {
     final maps = await db.query('date_values');
     return maps.map((m) {
       final dateValues = DateValues(
-        lastUpdate: DateTime.parse(m['date_completed'] as String),
-        weeklyUpdate: DateTime.parse(m['date_completed'] as String),
-        monthlyUpdate: DateTime.parse(m['date_completed'] as String),
+        lastUpdate: DateTime.parse(m['last_update'] as String),
+        weeklyUpdate: DateTime.parse(m['weekly_update'] as String),
+        monthlyUpdate: DateTime.parse(m['monthly_update'] as String),
         isStreak: (m['is_streak'] as int) == 1,
       );
       if (m['app_start_date'] != null) {
-        dateValues.appStartDate = DateTime.parse(m['date_completed'] as String);
+        dateValues.appStartDate = DateTime.parse(m['app_start_date'] as String);
       }
       return dateValues;
     }).toList();
@@ -618,7 +629,7 @@ class DbService {
     final db = await database;
     return db.update(
       'models',
-      {'is_enabled': 0},
+      {'is_enabled': model.isEnabled ? 1 : 0},
       where: 'id = ?',
       whereArgs: [model.id],
     );

@@ -428,9 +428,21 @@ class AppModel extends ChangeNotifier {
   }
 
   void addModel(Model nmodel) {
-    models.add(nmodel);
-    db.insertModel(nmodel);
-    notifyListeners();
+    if (nmodel.type == Type.milestone) {
+      final newActiveTask = ActiveTask(
+        taskId: 0,
+        activeTask: nmodel.name,
+        taskType: nmodel.type,
+        taskCategory: nmodel.category,
+        taskDifficulty: nmodel.difficulty,
+      );
+    } else if (nmodel.type == Type.levelup) {
+      return;
+    } else {
+      models.add(nmodel);
+      db.insertModel(nmodel);
+      notifyListeners();
+    }
   }
 
   void updateModel(int id) {
