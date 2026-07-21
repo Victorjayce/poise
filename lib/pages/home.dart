@@ -25,15 +25,36 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _load();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _load(context);
+    });
   }
 
-  Future<void> _load() async {
-    await appModel.load();
+  Future<void> _load(BuildContext context) async {
+    bool isNewDay = await appModel.load();
 
     setState(() {
       loaded = true;
     });
+
+    if (!context.mounted) return;
+
+    if (isNewDay) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Color(0xff00001d),
+          title: const Text('New Day'),
+          content: const Text('Your tasks have refreshed.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override

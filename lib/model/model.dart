@@ -3,7 +3,7 @@ import 'package:poise/logics/progressionfactory.dart';
 import 'package:poise/logics/statlogic.dart';
 import 'package:poise/logics/umodel.dart';
 import 'package:poise/logics/dbservice.dart';
-import 'package:poise/logics/homeload.dart';
+import 'package:poise/logics/loading.dart';
 
 enum Type {
   daily('Daily'),
@@ -251,7 +251,6 @@ class ProgressionRule {
 
 class AppModel extends ChangeNotifier {
   bool isLoading = true;
-  bool newDay = false;
   late List<Model> models;
   late List<HistoryModel> history;
   late List<ActiveTask> activeTasks;
@@ -333,7 +332,8 @@ class AppModel extends ChangeNotifier {
       ProgressionFactory.createRules();
   final db = DbService.instance;
 
-  Future<void> load() async {
+  Future<bool> load() async {
+    bool newDay = false;
     models = await db.getModels();
     history = await db.getHistory();
     activeTasks = await db.getActiveTasks();
@@ -342,7 +342,7 @@ class AppModel extends ChangeNotifier {
     dateValues = dateMod.first;
     final statMod = await db.getStatModels();
     statModel = statMod.first;
-    loading(
+    newDay = await loading(
       qualifiedModels,
       activeTasks,
       statModel,
@@ -351,8 +351,7 @@ class AppModel extends ChangeNotifier {
       progressionRules,
       db,
     );
-    isLoading = false;
-    newDay = true;
+    return newDay;
   }
 
   void addHistory(HistoryModel nhistory) {

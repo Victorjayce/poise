@@ -161,7 +161,7 @@ class DbService {
     }).toList();
   }
 
-  void loadingUpdates(
+  Future<void> loadingUpdates(
     List<ActiveTask> oldtasks,
     List<ActiveTask> newtasks,
     List<Model> selectedmodels,
