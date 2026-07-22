@@ -61,7 +61,7 @@ class DbService {
         type TEXT NOT NULL,
         is_enabled INTEGER NOT NULL DEFAULT 1,
         category TEXT NOT NULL,
-        cool_down INTEGER NOT NULL DEFAULT 0
+        cooldown INTEGER NOT NULL DEFAULT 0
       )
     ''');
         await seedModels(db);

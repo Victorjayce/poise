@@ -327,6 +327,12 @@ class AppModel extends ChangeNotifier {
       progressionRules,
       db,
     );
+    final dateModd = await db.getDateValues();
+    dateValues = dateModd.first;
+    final statModd = await db.getStatModels();
+    statModel = statModd.first;
+    models = await db.getModels();
+    activeTasks = await db.getActiveTasks();
     return newDay;
   }
 
