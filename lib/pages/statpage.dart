@@ -17,8 +17,7 @@ class _StatsScreenState extends State<StatsScreen>
   Widget build(BuildContext context) {
     super.build(context);
     final app = appModel;
-    return Expanded(
-      child: Container(
+    return Container(
         color: const Color(0xFF00001D),
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -183,7 +182,6 @@ class _StatsScreenState extends State<StatsScreen>
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
