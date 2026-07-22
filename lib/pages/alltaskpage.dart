@@ -66,7 +66,7 @@ class _AllTaskPageState extends State<AllTaskPage> {
                         icon: const Icon(
                           Icons.add,
                           color: Color(0xff40dcc7),
-                          size: 30,
+                          size: 40,
                         ),
                       ),
 

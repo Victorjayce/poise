@@ -44,12 +44,18 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) => AlertDialog(
           backgroundColor: Color(0xff00001d),
-          title: const Text('New Day'),
-          content: const Text('Your tasks have refreshed.'),
+          title: const Text('New Day', style: TextStyle(color: Colors.white)),
+          content: const Text(
+            'Your tasks have refreshed.',
+            style: TextStyle(color: Colors.white),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
+              child: const Text(
+                'OK',
+                style: TextStyle(color: Color(0xff40dcc7)),
+              ),
             ),
           ],
         ),

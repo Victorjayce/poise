@@ -9,7 +9,7 @@ enum Type {
   daily('Daily'),
   weekly('Weekly'),
   monthly('Monthly'),
-  milestone('Monthly'),
+  milestone('MileStone'),
   levelup('LevelUp');
 
   const Type(this.title);
@@ -427,7 +427,7 @@ class AppModel extends ChangeNotifier {
     return (rows, level);
   }
 
-  void addModel(Model nmodel) {
+  void addModel(Model nmodel) async {
     if (nmodel.type == Type.milestone) {
       final newActiveTask = ActiveTask(
         taskId: 0,
@@ -437,11 +437,13 @@ class AppModel extends ChangeNotifier {
         taskDifficulty: nmodel.difficulty,
       );
       db.insertMileActiveTask(newActiveTask);
+      activeTasks = await db.getActiveTasks();
     } else if (nmodel.type == Type.levelup) {
       return;
     } else {
       models.add(nmodel);
       db.insertModel(nmodel);
+      models = await db.getModels();
     }
     notifyListeners();
   }

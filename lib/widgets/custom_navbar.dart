@@ -23,14 +23,14 @@ class CustomNavBar extends StatelessWidget {
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
       child: Column(
         children: [
-          SizedBox(height: 12),
+          SizedBox(height: 15),
           Row(
             children: [
               IconButton(
                 onPressed: () {
                   Scaffold.of(context).openEndDrawer();
                 },
-                icon: const Icon(Icons.menu, color: selected, size: 25),
+                icon: const Icon(Icons.menu, color: selected, size: 40),
               ),
 
               const Spacer(),
@@ -38,6 +38,7 @@ class CustomNavBar extends StatelessWidget {
               Icon(
                 Icons.local_fire_department,
                 color: streak >= 1 ? Colors.red : Colors.grey,
+                size: 40,
               ),
 
               const SizedBox(width: 4),
@@ -46,6 +47,7 @@ class CustomNavBar extends StatelessWidget {
                 streak.toString(),
                 style: TextStyle(
                   color: streak >= 1 ? Colors.white : Colors.grey,
+                  fontSize: 40,
                 ),
               ),
 
@@ -53,7 +55,7 @@ class CustomNavBar extends StatelessWidget {
 
               IconButton(
                 onPressed: () => callAddTask(context),
-                icon: const Icon(Icons.add, color: selected, size: 25),
+                icon: const Icon(Icons.add, color: selected, size: 40),
               ),
             ],
           ),
