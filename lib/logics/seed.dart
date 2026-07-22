@@ -863,7 +863,7 @@ final List<Map<String, Object?>> seedLevelUpsData = [
   {
     'level': 10,
     'is_active': 0,
-    'difficulty': 'easy',
+    'difficulty': 'mid',
     'name': 'Neutral Stranger Conversation',
     'category': 'convo',
     'description':

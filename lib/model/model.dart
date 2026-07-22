@@ -302,32 +302,7 @@ class AppModel extends ChangeNotifier {
     monthlyUpdate: DateTime.now(),
     isStreak: false,
   );
-  final List<LevelUp> levelUp = [
-    LevelUp(
-      level: 2,
-      isActive: true,
-      difficulty: Difficulty.easy,
-      name: 'Morning Confidence',
-      category: Category.physical,
-      description: 'Stand tall and maintain confident posture all day.',
-    ),
-    LevelUp(
-      level: 5,
-      isActive: true,
-      difficulty: Difficulty.mid,
-      name: 'Conversation Master',
-      category: Category.convo,
-      description: 'Keep a conversation going for 10 minutes.',
-    ),
-    LevelUp(
-      level: 10,
-      isActive: true,
-      difficulty: Difficulty.hard,
-      name: 'Fear Breaker',
-      category: Category.risk,
-      description: 'Approach ten strangers this week.',
-    ),
-  ];
+  late List<LevelUp> levelUp;
   final List<ProgressionRule> progressionRules =
       ProgressionFactory.createRules();
   final db = DbService.instance;
@@ -336,6 +311,7 @@ class AppModel extends ChangeNotifier {
     bool newDay = false;
     models = await db.getModels();
     history = await db.getHistory();
+    levelUp = await db.getLevelUps();
     activeTasks = await db.getActiveTasks();
     qualifiedModels = await db.getQualifiedModels();
     final dateMod = await db.getDateValues();
