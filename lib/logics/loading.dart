@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:poise/logics/statlogic.dart';
 import 'package:poise/logics/dbservice.dart';
 import 'package:poise/model/model.dart';
+import 'dart:developer' as dev;
 
 Future<bool> loading(
   List<Model> models,
@@ -85,6 +86,10 @@ Future<bool> loading(
       statModel,
       date,
     );
+
+    dev.log("========== AFTER LOADING ==========");
+    dev.log("Returned Models: ${modelsToUpdate.length}");
+    dev.log("Returned ActiveTasks: ${newTasks.length}");
   }
 
   return newDay;
