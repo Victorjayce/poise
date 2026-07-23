@@ -181,7 +181,7 @@ class DbService {
       WHEN cooldown = 2 THEN 3
       WHEN cooldown = 3 THEN 0
     END
-    WHERE cooldown IN (1, 2, 3)
+    WHERE type = 'daily' AND cooldown IN (1, 2, 3)
   ''');
     await tx.rawUpdate('''
     UPDATE models
@@ -189,7 +189,7 @@ class DbService {
       WHEN cooldown = 1 THEN 2
       WHEN cooldown = 2 THEN 0
     END
-    WHERE type = weekly AND cooldown IN (1, 2)
+    WHERE type = 'weekly' AND cooldown IN (1, 2)
   ''');
   }
 
