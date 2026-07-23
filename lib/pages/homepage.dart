@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen>
         .where((a) => a.taskType == Type.milestone)
         .toList();
     return Stack(
+      fit: StackFit.expand,
       children: [
         Container(
           color: Color(0xff00001d),

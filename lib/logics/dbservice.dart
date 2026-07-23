@@ -123,14 +123,20 @@ class DbService {
   )
 ''');
 
-        final now = DateTime.now()
+        final day = DateTime.now()
             .subtract(Duration(days: 1))
+            .toIso8601String();
+        final week = DateTime.now()
+            .subtract(Duration(days: 8))
+            .toIso8601String();
+        final month = DateTime.now()
+            .subtract(Duration(days: 32))
             .toIso8601String();
         await db.insert('date_values', {
           'id': 1,
-          'last_update': now,
-          'weekly_update': now,
-          'monthly_update': now,
+          'last_update': day,
+          'weekly_update': week,
+          'monthly_update': month,
           'is_streak': 0,
           'app_start_date': null,
         });
