@@ -177,39 +177,41 @@ class _AddTaskState extends State<AddTask> {
 
               const SizedBox(height: 24),
 
-              Row(
-                children: [
-                  Expanded(
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Colors.red,
-                      ),
-                      onPressed: () => Navigator.pop(context, false),
-                      child: const Text("Cancel"),
-                    ),
-                  ),
-
-                  AnimatedScale(
-                    scale: canSave ? 1 : 0,
-                    duration: Duration(milliseconds: 250),
-                    child: SizedBox(width: 15),
-                  ),
-
-                  Expanded(
-                    child: AnimatedScale(
-                      scale: canSave ? 1 : 0,
-                      duration: Duration(milliseconds: 250),
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF40DCC7),
-                          foregroundColor: const Color(0xFF00001B),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                transitionBuilder: (child, animation) => SizeTransition(
+                  sizeFactor: animation,
+                  axis: Axis.horizontal,
+                  child: child,
+                ),
+                child: canSave
+                    ? Row(
+                        key: const ValueKey(true),
+                        children: [
+                          Expanded(
+                            child: FilledButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: const Text("Cancel"),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: FilledButton(
+                              onPressed: () =>
+                                  savemodel(context, widget.pageContext),
+                              child: const Text("Save"),
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox(
+                        key: const ValueKey(false),
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: const Text("Cancel"),
                         ),
-                        onPressed: () => savemodel(context, widget.pageContext),
-                        child: const Text("Save"),
                       ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

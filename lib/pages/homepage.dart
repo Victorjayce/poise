@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Stack(
       children: [
         Container(
-          color: Color(0xff001f5a),
+          color: Color(0xff00001d),
           child: SingleChildScrollView(
             controller: controller,
             child: Container(

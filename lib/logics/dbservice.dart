@@ -176,11 +176,7 @@ class DbService {
     final db = await database;
     await db.transaction((tx) async {
       for (final task in oldtasks) {
-        await tx.delete(
-          'active_tasks',
-          where: 'id = ?',
-          whereArgs: [task.taskId],
-        );
+        await tx.delete('active_tasks', where: 'id = ?', whereArgs: [task.id]);
       }
       for (var task in newtasks) {
         await tx.insert('active_tasks', {
