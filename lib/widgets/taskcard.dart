@@ -225,6 +225,15 @@ class _TaskCardState extends State<TaskCard> {
         },
       );
     }
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Task Completed!'),
+        backgroundColor: Color(0xff40dcc7),
+        dismissDirection: DismissDirection.horizontal,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   Future<void> checklevel(BuildContext context, LevelUp task) async {
@@ -263,5 +272,14 @@ class _TaskCardState extends State<TaskCard> {
         },
       );
     }
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Task Completed!'),
+        backgroundColor: Color(0xff40dcc7),
+        dismissDirection: DismissDirection.horizontal,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }

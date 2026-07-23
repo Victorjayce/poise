@@ -4,7 +4,6 @@ import 'package:poise/logics/statlogic.dart';
 import 'package:poise/logics/umodel.dart';
 import 'package:poise/logics/dbservice.dart';
 import 'package:poise/logics/loading.dart';
-import 'dart:developer' as dev;
 
 enum Type {
   daily('Daily'),
@@ -310,6 +309,7 @@ class AppModel extends ChangeNotifier {
 
   Future<bool> load() async {
     bool newDay = false;
+    db.updateCooldown();
     models = await db.getModels();
     history = await db.getHistory();
     levelUp = await db.getLevelUps();
@@ -319,15 +319,6 @@ class AppModel extends ChangeNotifier {
     dateValues = dateMod.first;
     final statMod = await db.getStatModels();
     statModel = statMod.first;
-
-    dev.log("========== BEFORE LOADING ==========");
-    dev.log("Models: ${models.length}");
-    dev.log("Existing ActiveTasks: ${activeTasks.length}");
-    dev.log("Last Update: ${dateValues.lastUpdate}");
-    dev.log("Today: ${DateTime.now()}");
-    dev.log(
-      "Same Day: ${dateOnly(dateValues.lastUpdate) == dateOnly(DateTime.now())}",
-    );
 
     newDay = await loading(
       qualifiedModels,
@@ -429,6 +420,7 @@ class AppModel extends ChangeNotifier {
         taskType: nmodel.type,
         taskCategory: nmodel.category,
         taskDifficulty: nmodel.difficulty,
+        description: nmodel.description,
       );
       db.insertMileActiveTask(newActiveTask);
       activeTasks = await db.getActiveTasks();

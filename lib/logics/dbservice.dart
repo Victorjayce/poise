@@ -172,6 +172,27 @@ class DbService {
     }).toList();
   }
 
+  void updateCooldown() async {
+    final tx = await database;
+    await tx.rawUpdate('''
+    UPDATE models
+    SET cooldown = CASE
+      WHEN cooldown = 1 THEN 2
+      WHEN cooldown = 2 THEN 3
+      WHEN cooldown = 3 THEN 0
+    END
+    WHERE cooldown IN (1, 2, 3)
+  ''');
+    await tx.rawUpdate('''
+    UPDATE models
+    SET cooldown = CASE
+      WHEN cooldown = 1 THEN 2
+      WHEN cooldown = 2 THEN 0
+    END
+    WHERE type = weekly AND cooldown IN (1, 2)
+  ''');
+  }
+
   Future<void> loadingUpdates(
     List<ActiveTask> oldtasks,
     List<ActiveTask> newtasks,
@@ -202,14 +223,6 @@ class DbService {
         'is_streak': 0, // To Do
         'app_start_date': date.appStartDate!.toIso8601String(),
       });
-      await tx.rawUpdate('''
-    UPDATE models
-    SET cooldown = CASE
-      WHEN cooldown = 1 THEN 2
-      WHEN cooldown = 2 THEN 0
-    END
-    WHERE cooldown IN (1, 2)
-  ''');
       for (final model in selectedmodels) {
         tx.update(
           'models',

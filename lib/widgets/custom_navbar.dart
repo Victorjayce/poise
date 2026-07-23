@@ -38,7 +38,7 @@ class CustomNavBar extends StatelessWidget {
               Icon(
                 Icons.local_fire_department,
                 color: streak >= 1 ? Colors.red : Colors.grey,
-                size: 40,
+                size: 35,
               ),
 
               const SizedBox(width: 4),
@@ -47,7 +47,7 @@ class CustomNavBar extends StatelessWidget {
                 streak.toString(),
                 style: TextStyle(
                   color: streak >= 1 ? Colors.white : Colors.grey,
-                  fontSize: 40,
+                  fontSize: 30,
                 ),
               ),
 
@@ -119,17 +119,7 @@ class CustomNavBar extends StatelessWidget {
   }
 
   Future<void> callAddTask(BuildContext context) async {
-    bool added = await showAddTaskDialog(context);
+    await showAddTaskDialog(context);
     if (!context.mounted) return;
-    if (added) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Task added successfully!'),
-          backgroundColor: Color(0xff40dcc7),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
   }
 }
