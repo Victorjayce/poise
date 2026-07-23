@@ -98,11 +98,7 @@ class _HomePageState extends State<HomePage> {
 
       body: Column(
         children: [
-          CustomNavBar(
-            currentPage: currentPage,
-            controller: controller,
-            streak: app.statModel.streak,
-          ),
+          CustomNavBar(currentPage: currentPage, controller: controller),
           Expanded(
             child: PageView(
               controller: controller,

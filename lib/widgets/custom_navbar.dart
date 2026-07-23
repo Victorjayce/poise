@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:poise/widgets/addtask.dart';
+import 'package:poise/model/model.dart';
 
 class CustomNavBar extends StatelessWidget {
   const CustomNavBar({
     super.key,
     required this.currentPage,
     required this.controller,
-    required this.streak,
   });
 
   final int currentPage;
   final PageController controller;
-  final int streak;
 
   @override
   Widget build(BuildContext context) {
     const background = Color(0xff001F5A);
     const selected = Color(0xff40DCC7);
+    final streak = ModelProvider.of(context).statModel.streak;
 
     return Container(
       color: background,
