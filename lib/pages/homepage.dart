@@ -58,40 +58,54 @@ class _HomeScreenState extends State<HomeScreen>
         .toList();
     return Stack(
       children: [
-        SingleChildScrollView(
-          controller: controller,
-          child: Container(
-            color: Color(0xFF00001D),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TaskSection(title: 'Daily', tasks: dailytasks),
-                ),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TaskSection(title: 'Weekly', tasks: weeklytasks),
-                ),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TaskSection(title: 'Monthly', tasks: monthlytasks),
-                ),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TaskSection(title: 'LevelUp', lvltasks: leveluptasks),
-                ),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TaskSection(title: 'Milestone', tasks: milestonetasks),
-                ),
-                const SizedBox(height: 20),
-              ],
+        Container(
+          color: Color(0xff001f5a),
+          child: SingleChildScrollView(
+            controller: controller,
+            child: Container(
+              color: Color(0xFF00001D),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20),
+                  if (dailytasks.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TaskSection(title: 'Daily', tasks: dailytasks),
+                    ),
+                  if (dailytasks.isNotEmpty) const SizedBox(height: 5),
+                  if (weeklytasks.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TaskSection(title: 'Weekly', tasks: weeklytasks),
+                    ),
+                  if (weeklytasks.isNotEmpty) const SizedBox(height: 5),
+                  if (monthlytasks.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TaskSection(title: 'Monthly', tasks: monthlytasks),
+                    ),
+                  if (monthlytasks.isNotEmpty) const SizedBox(height: 5),
+                  if (leveluptasks.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TaskSection(
+                        title: 'LevelUp',
+                        lvltasks: leveluptasks,
+                      ),
+                    ),
+                  if (leveluptasks.isNotEmpty) const SizedBox(height: 5),
+                  if (milestonetasks.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TaskSection(
+                        title: 'Milestone',
+                        tasks: milestonetasks,
+                      ),
+                    ),
+                  if (milestonetasks.isNotEmpty) const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

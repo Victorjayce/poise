@@ -123,7 +123,9 @@ class DbService {
   )
 ''');
 
-        final now = DateTime.now().toIso8601String();
+        final now = DateTime.now()
+            .subtract(Duration(days: 1))
+            .toIso8601String();
         await db.insert('date_values', {
           'id': 1,
           'last_update': now,
