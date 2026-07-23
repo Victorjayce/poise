@@ -37,7 +37,7 @@ flutter_launcher_icons:
 
 flutter_native_splash:
 
-  color: "#40DCC7"
+  color: "#001F5A"
   image: assets/poiseicon.png
 
   android: true
