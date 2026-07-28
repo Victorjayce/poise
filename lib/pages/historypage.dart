@@ -31,6 +31,10 @@ class _HistoryPageState extends State<HistoryPage> {
           showbacktotop = shouldShow;
         });
       }
+      if (controller.position.pixels >
+          controller.position.maxScrollExtent - 200) {
+        appModel.loadMoreHistory();
+      }
     });
   }
 
