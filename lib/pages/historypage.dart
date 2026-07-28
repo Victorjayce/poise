@@ -37,6 +37,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final app = appModel;
+    final pageHistory = app.history.reversed.toList();
     return Scaffold(
       body: Stack(
         children: [
@@ -95,7 +96,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             padding: const EdgeInsets.only(bottom: 60),
                             itemCount: app.history.length,
                             itemBuilder: (context, index) {
-                              final history = app.history[index];
+                              final history = pageHistory[index];
 
                               return Container(
                                 margin: const EdgeInsets.only(bottom: 10),

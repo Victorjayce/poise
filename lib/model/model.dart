@@ -339,6 +339,23 @@ class AppModel extends ChangeNotifier {
     return newDay;
   }
 
+  bool isLoadingHistory = false;
+  bool hasMore = true;
+  Future<void> loadMoreHistory() async {
+    if (isLoadingHistory || !hasMore) {
+      return;
+    }
+    isLoadingHistory = true;
+    final more = await db.getHistory(limit: 50, offset: history.length);
+    if (more.isEmpty) {
+      hasMore = false;
+    } else {
+      history.addAll(more);
+    }
+    isLoadingHistory = false;
+    notifyListeners();
+  }
+
   void addHistory(HistoryModel nhistory) {
     history.add(nhistory);
     notifyListeners();

@@ -468,9 +468,12 @@ class DbService {
     return rows;
   }
 
-  Future<List<HistoryModel>> getHistory() async {
+  Future<List<HistoryModel>> getHistory({
+    int limit = 50,
+    int offset = 0,
+  }) async {
     final db = await database;
-    final maps = await db.query('history');
+    final maps = await db.query('history', limit: limit, offset: offset);
     return maps.map((m) {
       final history = HistoryModel(
         taskName: m['task_name'] as String,
