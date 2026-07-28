@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Poise Engine',
         theme: ThemeData(
-          brightness: Brightness.dark,
+          brightness: Brightness.light,
           scaffoldBackgroundColor: Color(0xff00001d),
           colorScheme: .fromSeed(seedColor: Colors.deepPurple),
         ),
