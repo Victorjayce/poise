@@ -465,7 +465,7 @@ class AppModel extends ChangeNotifier {
 
   double get xpProgress => levelData.currentXp / levelData.nextLevelXp;
 
-  String get xpText => "${levelData.currentXp}/${levelData.nextLevelXp} XP";
+  String get xpText => "${levelData.currentXp}/${levelData.nextLevelXp}  ";
 
   // Statistics
   double get averageDifficulty => UModelValues.avgDiff(statModel);
