@@ -16,7 +16,7 @@ class CustomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     const background = Color(0xff001F5A);
     const selected = Color(0xff40DCC7);
-    final streak = ModelProvider.of(context).statModel.streak;
+    final streak = appModel.statModel.streak;
 
     return Container(
       color: background,
