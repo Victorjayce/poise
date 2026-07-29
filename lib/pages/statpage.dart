@@ -108,7 +108,7 @@ class _StatsScreenState extends State<StatsScreen>
               Column(
                 children: [
                   Text(
-                    _truncateDouble(app.successRate),
+                    _sRate(app.successRate),
                     style: TextStyle(
                       color: switch (app.successRate) {
                         0.6 => Colors.red,
@@ -189,5 +189,10 @@ class _StatsScreenState extends State<StatsScreen>
     String s = value.toStringAsFixed(6);
     int dotIndex = s.indexOf('.');
     return s.substring(0, dotIndex + 2);
+  }
+
+  String _sRate(double value) {
+    final percent = (value * 100).floor();
+    return '$percent%';
   }
 }
